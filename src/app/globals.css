@@ -1,0 +1,737 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Jungle, the site's one theme. Why each value is what it is lives in
+   CLAUDE.md under "Design rules"; the comments here only say what the code
+   cannot.
+
+   `static` keeps every token in the output. By default Tailwind drops the
+   variables no utility references, and `var(--color-surface)` then resolves
+   to nothing.
+   ========================================================================== */
+
+@theme static {
+  /* colour */
+  --color-background: #0d1a13;
+  --color-surface: #1c2a20;
+  --color-surface-alt: #243d27;
+  --color-accent: #3fc7b8;
+  --color-hover: #0e332f;
+  --color-edge: #2a3b2c;
+  --color-ink: #ede8d2;
+  --color-ink-muted: #a9b597;
+  --color-plate: #ede8d2;
+  --color-on-plate: #0d1a13;
+  /* The focus ring and nothing else: it has to clear 3:1 against whatever it
+     lands on, which is a different test from how the accent reads. */
+  --color-focus: #3fc7b8;
+
+  /* radius */
+  --radius-card: 16px;
+  --radius-chip: 12px;
+  /* A plate inside a chip. Geometrically 8px, set 2px rounder because a small
+     square reads sharper than its number. */
+  --radius-mark: 10px;
+  --radius-pill: 999px;
+
+  /* shadow */
+  --shadow-gloss: inset 0 1px 0 rgb(255 255 255 / 0.07);
+  --shadow-ring: 0 0 0 2px var(--color-focus);
+  --shadow-card:
+    0 1px 2px rgb(0 0 0 / 0.45), 0 12px 28px -14px rgb(0 0 0 / 0.62);
+  /* A linked card under the pointer: the same shadow, deeper. It reaches about
+     twice as far below the card as `--shadow-card` and is darker, so the
+     change reads on this ground. */
+  --shadow-hover:
+    0 2px 6px rgb(0 0 0 / 0.55), 0 18px 40px -14px rgb(0 0 0 / 0.85);
+  --shadow-pill:
+    0 1px 2px rgb(0 0 0 / 0.42), 0 8px 20px -10px rgb(63 199 184 / 0.26);
+
+  /* type: seven steps, and every size on the site is one of them */
+  --text-micro: 0.6rem;
+  --text-micro--font-weight: 600;
+  --text-eyebrow: 0.66rem;
+  --text-meta: 0.78rem;
+  --text-meta--font-weight: 500;
+  --text-ui: 0.85rem;
+  --text-body-sm: 0.91rem;
+  --text-body: 1rem;
+  --text-lede: 1.06rem;
+  --text-lede--line-height: 1.5;
+
+  --tracking-label: 0.09em;
+
+  --font-display:
+    var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+  --font-body:
+    var(--font-karla), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Values that are not Tailwind namespaces. */
+:root {
+  /* The display face's tuning, so swapping the face touches only these.
+     Playfair is a high-contrast serif: near-neutral tracking, extra leading. */
+  --display-weight: 600;
+  --display-tracking: -0.008em;
+  --display-lh: 1.1;
+  --display-scale: 1.02;
+
+  --dur: 180ms;
+  /* For big moves, a dialog or a tile turning over, which flicker at 180ms. */
+  --dur-lg: 260ms;
+  /* How fast a press goes in. A tap lifts before 180ms has got anywhere. */
+  --dur-press: 60ms;
+  --press-scale: 0.96;
+  /* How much a raised control grows under the pointer. A few pixels at every
+     size, so `press-small` steps it up for a control too small for 4% to
+     show. A card does not grow at all: see `feedback-shadow`. */
+  --hover-scale: 1.04;
+
+  /* Grids that fit as many equal columns as they can at this width. */
+  --stack-tile-min: 7.5rem;
+  --stat-tile-min: 11rem;
+  --media-tile-min: 7rem;
+
+  /* The stack tile. */
+  --stack-gap: 0.75rem;
+  --tile-perspective: 44rem;
+  --tile-rim: inset -1px -1px 0 rgb(0 0 0 / 0.38);
+
+  /* The ground's texture, drawn by `body::before`: a cool spill from the top
+     right, a water glow from the bottom left, and grain. The grain's 50% is
+     in the file, since a background layer has no opacity of its own. */
+  --wash-top-right: radial-gradient(
+    52% 44% at 96% 0%,
+    color-mix(in srgb, var(--color-surface) 90%, transparent),
+    transparent 72%
+  );
+  --wash-bottom-left: radial-gradient(
+    48% 42% at 4% 100%,
+    color-mix(in srgb, var(--color-accent) 16%, transparent),
+    transparent 70%
+  );
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* A phone. Unlayered, like the block it overrides. */
+@media (width < 48rem) {
+  :root {
+    /* One step smaller all round: every size and space is in rem. */
+    font-size: 93.75%;
+    --text-lede: 1rem;
+    --stack-tile-min: 5.5rem;
+    --stat-tile-min: 9rem;
+  }
+}
+
+/* ==========================================================================
+   Surfaces. One box-shadow carries the gloss and the depth together. A
+   surface nested inside another gets the gloss alone.
+   ========================================================================== */
+
+@utility surface {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-gloss), var(--shadow-card);
+}
+
+/* One step further from the ground: the panel a stack tile opens. Chip
+   coloured and chip shaped, like the tiles around it. */
+@utility surface-alt {
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-chip);
+  box-shadow: var(--shadow-gloss), var(--shadow-card);
+}
+
+@utility chip {
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-chip);
+  box-shadow: var(--shadow-gloss);
+}
+
+/* A hairline above a block, drawn as a shadow so it takes no layout box. */
+@utility divider-top {
+  box-shadow: inset 0 1px 0 var(--color-edge);
+}
+
+@utility eyebrow {
+  color: var(--color-accent);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Interaction. Every control gives one feedback, and each feedback is one
+   `feedback-*` utility that writes both halves side by side: the hover on a
+   desktop, `(hover: hover)` and `:hover`, and the press on a phone,
+   `(hover: none)` and `:active`. So which controls get which treatment is
+   decided once, for both devices.
+
+   | utility           | desktop hover               | phone press |
+   | `feedback-grow`   | grows                       | shrinks     |
+   | `feedback-shadow` | shadow deepens              | shrinks     |
+   | `feedback-fill`   | fills, accent text          | shrinks     |
+   | `feedback-text`   | accent text                 | shrinks     |
+
+   On a phone the press is the shrink and nothing else: a tap has no hover,
+   and a fill or a colour on the press read as a flash on every tap. The
+   shrink is `--press-scale`, which the size classes set: `press-large` gives
+   less, `press-small` more, `press-none` not at all.
+
+   A glyph moves on top of a desktop hover. Nothing lifts or tilts. Every
+   hover is gated on `(hover: hover)`: a tap sets `:hover` and leaves it set
+   until the next tap lands elsewhere.
+   ========================================================================== */
+
+/* Anything that gets pressed. It owns the transition for every channel a
+   control animates, so nothing carrying it adds a Tailwind `transition-*`:
+   `transition` is one property and the two would race. `transform` composes
+   with the `scale` that `feedback-grow` sets.
+
+   A desktop click gives too, the same shrink as a phone's press, from
+   wherever the hover left the control. It goes in fast and comes back at the
+   usual pace. The phone's press is written in each `feedback-*` utility,
+   beside the hover it stands in for. */
+@utility pressable {
+  transition:
+    color var(--dur) ease,
+    background-color var(--dur) ease,
+    box-shadow var(--dur) ease,
+    transform var(--dur) ease,
+    translate var(--dur) ease,
+    scale var(--dur) ease;
+
+  @media (hover: hover) {
+    &:active {
+      transform: scale(var(--press-scale));
+      transition-duration: var(--dur-press);
+    }
+  }
+}
+
+/* A big target, carried alongside `pressable`: a card, a full-width row. A
+   press or a click gives less and at the usual pace, because 4% of a card the
+   width of the page is a lurch, and a scroll that starts on one sets
+   `:active` for a moment, so a fast press made every card pulse on the way
+   past.
+
+   On a touch screen a long press does nothing to it: no link preview lifting
+   the whole card out, no drag, no text selection. Desktop keeps right-click,
+   dragging a link to the tab bar, and selecting text. */
+@utility press-large {
+  --press-scale: 0.985;
+  --dur-press: var(--dur);
+
+  @media (hover: none) {
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+/* A control under 32px, carried alongside `pressable`: the dialog's close.
+   It moves more by ratio so it moves at all: 4% of 28px is a pixel. */
+@utility press-small {
+  --press-scale: 0.9;
+  --hover-scale: 1.12;
+}
+
+/* A control whose click opens a dialog, carried alongside `pressable`: every
+   `CustomMedia`. On a desktop it does not give: the pointer has already grown
+   it, the dialog's panel grows in as the answer to the same click, and a
+   picture shrinking between the two was motions pulling opposite ways. A
+   phone has no hover before the press, so there it shrinks like any control
+   and the dialog follows. */
+@utility press-none {
+  @media (hover: hover) {
+    --press-scale: 1;
+  }
+}
+
+/* A raised control grows a little: a pill, a picture, the dialog's close. The
+   stack tile does the same, written in its own section because its click
+   shares `scale`. Not a card, which holds still so its arrow's slide reads.
+   On `scale`, which composes with a desktop click on `transform`, so a click
+   on a grown control gives from the grown size. On a phone the press shrinks
+   it. */
+@utility feedback-grow {
+  @media (hover: hover) {
+    &:hover {
+      scale: var(--hover-scale);
+    }
+  }
+  @media (hover: none) {
+    &:active {
+      transform: scale(var(--press-scale));
+      transition-duration: var(--dur-press);
+    }
+  }
+}
+
+/* A card holds still and its shadow deepens, reaching further and darker. A
+   card does not grow, because growing from its centre pulled its arrow back
+   by as much as the arrow slid. With focus as well, the ring stays: it is
+   written here at a higher specificity, so it does not hang on which utility
+   the stylesheet happens to put last. On a phone the press shrinks it, by
+   the card's gentler `press-large` amount. */
+@utility feedback-shadow {
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--shadow-gloss), var(--shadow-hover);
+    }
+    &:hover:focus-visible {
+      box-shadow: var(--shadow-ring), var(--shadow-gloss), var(--shadow-hover);
+    }
+  }
+  @media (hover: none) {
+    &:active {
+      transform: scale(var(--press-scale));
+      transition-duration: var(--dur-press);
+    }
+  }
+}
+
+/* Anything flat in a list fills and its text turns accent: a rail row, a row
+   in a stack panel. A fill, never a shadow or a size, because it sits inside
+   something else. On a phone the press shrinks it: a fill on a tap read as a
+   flash. */
+@utility feedback-fill {
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-hover);
+      color: var(--color-accent);
+    }
+  }
+  @media (hover: none) {
+    &:active {
+      transform: scale(var(--press-scale));
+      transition-duration: var(--dur-press);
+    }
+  }
+}
+
+/* A bare control with no ground of its own turns accent: Menu, Close and the
+   way back in the pinned bar. On a phone the press shrinks it. */
+@utility feedback-text {
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+  @media (hover: none) {
+    &:active {
+      transform: scale(var(--press-scale));
+      transition-duration: var(--dur-press);
+    }
+  }
+}
+
+/* A surface on the ground that can be pressed: the focus ring, drawn over its
+   gloss and its shadow. */
+@utility surface-interactive {
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-ring), var(--shadow-gloss), var(--shadow-card);
+  }
+}
+
+/* A bigger target than the control's ink, without padding the control: the
+   pinned bar's buttons line up with the page's gutter, so the extra reach is
+   an invisible box around them instead. */
+@utility hit-area {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--spacing) * -3);
+  }
+}
+
+/* The glyph moves the way its press goes: forward for a link, back for the
+   way out, a grow for something that opens in place. Desktop hover only: on a
+   phone the press is the shrink and nothing else. */
+.glyph {
+  transition: transform var(--dur) ease;
+}
+@media (hover: hover) {
+  .group:hover .glyph-forward {
+    transform: translateX(4px);
+  }
+  .group:hover .glyph-back {
+    transform: translateX(-4px);
+  }
+  .group:hover .glyph-open {
+    transform: scale(1.15);
+  }
+}
+
+/* ==========================================================================
+   Dialog. `CustomModal` stamps `data-shown` after `showModal()` and removes
+   it before `close()`, so both fades run while the dialog is in the top layer.
+   The CSS-only version needs `overlay`, which Safari does not have.
+   ========================================================================== */
+
+/* The whole viewport, with the panel centred in it. The tint is the caller's
+   background on this box rather than `::backdrop`. */
+.modal {
+  /* The UA gives a dialog `CanvasText`, not the page's colour. */
+  color: var(--color-ink);
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  transition: opacity var(--dur-lg) ease;
+}
+.modal[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal[data-shown] {
+  opacity: 1;
+}
+.modal::backdrop {
+  background: transparent;
+}
+
+.modal-panel {
+  max-height: 100dvh;
+  transform: scale(0.92);
+  transition: transform var(--dur-lg) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.modal[data-shown] .modal-panel {
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   The stack tile, a small card that turns over. `tile-scene` holds the
+   perspective, on an ancestor so the row shares one vanishing point;
+   `tile-flip` rotates; two `tile-face`s sit back to back.
+   ========================================================================== */
+
+@utility tile-scene {
+  perspective: var(--tile-perspective);
+  /* Half the row gap each side, see `stack-grid`. A margin, because padding
+     would move the perspective origin off the tile's centre. */
+  margin-block: calc(var(--stack-gap) / 2);
+  /* Where opening a tile scrolls it to: just under the pinned bar on a phone. */
+  @apply scroll-mt-8 max-md:scroll-mt-18;
+}
+
+/* Not `pressable`: that click is a `transform`, which would replace the turn,
+   and its `transition` would race this one. So everything a tile does under
+   the pointer or the finger is on `scale`, which composes with the turn, and
+   it keeps the turn's own pace on `transform`. */
+@utility tile-flip {
+  position: relative;
+  transform-style: preserve-3d;
+  transition:
+    transform var(--dur-lg) ease,
+    scale var(--dur) ease;
+  /* Its own layer from the start. Promoted only on hover, the layer snaps to
+     whole pixels and the mark jumps. */
+  transform: rotateY(0deg);
+  will-change: transform;
+}
+
+/* The ⓘ in a shut tile's corner. Muted at rest, accent under a desktop hover. */
+@utility tile-hint {
+  color: var(--color-ink-muted);
+  transition: color var(--dur) ease;
+}
+
+/* Both faces carry the rim, or it would vanish halfway through the turn. */
+@utility tile-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-chip);
+  background-color: var(--color-surface);
+  box-shadow: var(--tile-rim), var(--shadow-gloss), var(--shadow-card);
+  transition: box-shadow var(--dur) ease;
+}
+
+@utility tile-face-back {
+  background-color: var(--color-surface-alt);
+  transform: rotateY(180deg);
+}
+
+.tile-flip[data-open="true"] {
+  transform: rotateY(180deg);
+}
+
+/* A tile's feedback is `feedback-grow`, open or shut, since either way a press
+   turns it over: on a desktop it grows and its ⓘ turns accent, on a phone the
+   press shrinks it and the turn follows the tap. It is written out here
+   because everything the tile does is on `scale`: unlayered, a plain hover
+   rule would beat the click, so a click on a hovered tile is the two
+   multiplied. */
+@media (hover: hover) {
+  .tile-flip:hover {
+    scale: var(--hover-scale);
+  }
+  .tile-flip:hover:active {
+    scale: calc(var(--hover-scale) * var(--press-scale));
+    transition-duration: var(--dur-lg), var(--dur-press);
+  }
+  .tile-flip:hover .tile-hint {
+    color: var(--color-accent);
+  }
+}
+@media (hover: none) {
+  .tile-flip:active {
+    scale: var(--press-scale);
+    transition-duration: var(--dur-lg), var(--dur-press);
+  }
+}
+
+/* The flipper takes focus but paints nothing, so the faces draw the ring. */
+.tile-flip:focus-visible {
+  outline: none;
+}
+.tile-flip:focus-visible .tile-face {
+  box-shadow:
+    var(--shadow-ring),
+    var(--tile-rim),
+    var(--shadow-gloss),
+    var(--shadow-card);
+}
+
+/* ==========================================================================
+   Grids
+   ========================================================================== */
+
+/* The tiles and the panel they open, in one grid. No row gap: a gap cannot
+   animate, so a closing panel would leave one behind to vanish in a single
+   frame. The items carry half a gap each side instead, and the negative
+   margin takes back the halves at the outer edges. */
+@utility stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--stack-tile-min), 1fr));
+  column-gap: var(--stack-gap);
+  margin-block: calc(var(--stack-gap) / -2);
+}
+
+/* The row under the tile that opened it. `StackGrid` animates it open and
+   shut. Raised above the tiles, each of which is its own stacking context,
+   so the shadow of the row above does not lie across its top edge. */
+@utility stack-panel {
+  grid-column: 1 / -1;
+  margin-block: calc(var(--stack-gap) / 2);
+  position: relative;
+  z-index: 1;
+}
+
+@utility stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--stat-tile-min), 1fr));
+}
+
+/* `auto-fill`, so a lone screenshot keeps a tile's width. */
+@utility media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--media-tile-min), 1fr));
+  align-items: start;
+}
+
+/* ==========================================================================
+   Page frame
+   ========================================================================== */
+
+/* Every page: the rail in a fixed column, the content beside it. Below md it
+   stacks, and the top padding clears the pinned bar. */
+@utility page-shell {
+  @apply mx-auto grid max-w-300 grid-cols-[190px_minmax(0,1fr)] items-start gap-16 px-8 pt-16 pb-32;
+  @apply max-md:grid-cols-1 max-md:gap-0 max-md:px-5 max-md:pt-24;
+}
+
+/* Below md the rail is a drawer on the right edge. `Sidebar` hides it while
+   shut and stamps `data-shown` once it is drawn, so it slides on from the
+   edge and back off. Flat ground like the pinned bar, and the page behind it
+   is never scroll-locked: iOS paints a flat box under the toolbar of a page
+   it cannot scroll. */
+@utility rail-drawer {
+  @media (width < 48rem) {
+    position: fixed;
+    inset-block: 0;
+    right: 0;
+    z-index: 50;
+    width: calc(var(--spacing) * 72);
+    max-width: 80vw;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: calc(var(--spacing) * 3.5) calc(var(--spacing) * 5)
+      calc(var(--spacing) * 6);
+    background-color: var(--color-background);
+    box-shadow: var(--shadow-card);
+    translate: 100% 0;
+    transition: translate var(--dur-lg) ease;
+
+    &[data-shown] {
+      translate: none;
+    }
+  }
+}
+
+/* The dim behind the drawer, fading with its slide. */
+@utility rail-dim {
+  opacity: 0;
+  transition: opacity var(--dur-lg) ease;
+
+  &[data-shown] {
+    opacity: 1;
+  }
+}
+
+/* One row of the rail: a section, a page, the way back, a contact link. The
+   same row with a different destination, and drawn in two files, since the
+   landing writes its own contact links, so it is a treatment here rather than
+   a helper inside `Sidebar`. The current row is whichever carries
+   `aria-current`, so the highlight and what a screen reader announces cannot
+   disagree. Callers add `pressable feedback-fill`, like every other row. */
+@utility rail-row {
+  @apply flex items-center gap-2.5 rounded-chip px-3 py-1.5 text-ui text-ink-muted no-underline;
+
+  &[aria-current] {
+    @apply bg-hover font-semibold text-accent;
+  }
+}
+
+/* ==========================================================================
+   Base. It stays inside the layer: unlayered CSS beats every utility, and a
+   bare `a { color: inherit }` out here once overrode `text-background`.
+   ========================================================================== */
+
+@layer base {
+  html {
+    color-scheme: dark;
+    /* What iOS paints behind its status bar and toolbar, which nothing the
+       page draws can reach. */
+    background-color: var(--color-background);
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-alt) transparent;
+
+    /* A phone has none: the pinned bar's progress line does its job, and
+       iOS draws its indicator over the bar. */
+    @media (width < 48rem) {
+      scrollbar-width: none;
+    }
+  }
+
+  /* No background here. `html` has its own, so this one would not reach the
+     canvas: it would paint over the ground below. */
+  body {
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.66;
+    /* Light type on a dark ground bloats, so it is thinned. */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The ground: one fixed layer under the content, so the light stays put as
+     the page scrolls, and the grain blends into the ground rather than over
+     the cards and the type. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--color-background);
+    background-image:
+      var(--grain), var(--wash-bottom-left), var(--wash-top-right);
+    background-blend-mode: soft-light, normal, normal;
+
+    /* iOS cuts this layer off at the top of Safari's toolbar and paints the
+       strip under it flat. So a phone gets no bottom wash, and the grain
+       fades into the flat ground before the cut. */
+    @media (width < 48rem) {
+      background-image:
+        linear-gradient(to top, var(--color-background), transparent 20%),
+        var(--grain), var(--wash-top-right);
+      background-blend-mode: normal, soft-light, normal;
+    }
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    line-height: var(--display-lh);
+    text-wrap: balance;
+  }
+  /* The floors are set for a phone. */
+  h1 {
+    font-size: calc(clamp(28px, 4.9vw, 47px) * var(--display-scale));
+  }
+  h2 {
+    font-size: calc(clamp(20px, 2.6vw, 28px) * var(--display-scale));
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  /* Safari still needs its own pseudo-elements; the standard properties on
+     `html` cover the rest. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-pill);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(
+      in srgb,
+      var(--color-accent) 40%,
+      var(--color-surface-alt)
+    );
+  }
+  @media (width < 48rem) {
+    html::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+  /* With the durations gone a press would snap smaller and back, and a grow
+     would snap bigger. `.pressable` covers the phone's press as well as the
+     desktop click: every `feedback-*` control carries it. */
+  .pressable:active {
+    transform: none;
+  }
+  .feedback-grow:hover,
+  .tile-flip:hover,
+  .tile-flip:active,
+  .tile-flip:hover:active {
+    scale: none;
+  }
+}
