@@ -109,6 +109,14 @@ export default async function RolePage({
           <RoleDetail role={role} isCard={false} />
         </CustomSection>
 
+        {/* Here rather than on the landing's card: the card is the case for my
+            work, and this page is where a reader goes to ask about the job. */}
+        {role.ending ? (
+          <CustomSection id="ending" title={role.ending.title}>
+            <p className="text-lede text-ink-muted">{role.ending.text}</p>
+          </CustomSection>
+        ) : null}
+
         <CustomSection id="work" title="What I've done here">
           <WorkFilter
             groups={areasWorkedIn.map(({ area, items }) => ({

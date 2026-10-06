@@ -53,6 +53,8 @@
      where Preview trims it. */
   .role .period { white-space: nowrap; padding-right: 1.5pt; }
   .about { font-size: 8.5pt; margin-top: 1pt; }
+  /* Why the role ended, after its bullets: the gap a heading would leave. */
+  .about.ending { margin-top: 6pt; }
 
   h4 { font-size: 9.8pt; font-weight: 600; margin-top: 6pt; margin-bottom: 1.5pt; }
   ul { padding-left: 13pt; }
@@ -103,16 +105,18 @@
   <h4>Mobile</h4>
   <ul>
     <li>Built three React Native apps from scratch: the customer and business apps are live on the App Store and Google Play, the admin app ships internally through TestFlight</li>
-    <li>Built the shared design system used by all three apps: 53 components and design tokens</li>
+    <li>Built the components and design tokens shared by all three apps, so a design change only happens once</li>
     <li>Owned the release pipeline: EAS Build/Submit via GitHub Actions, three environments per app, TestFlight and Play Internal Testing, iOS credentials and Play App Signing</li>
     <li>Attributed installs from physical QR codes using AppsFlyer: a per-sticker ID resolves to a business on our join page, then survives the store install via deferred deep links to auto-attribute on first open</li>
     <li>Restructured onboarding after PostHog funnel tracking showed low completion: replaced Instagram-first sign-up with email OTP + Apple and Google OAuth, which doubled the completion rate</li>
   </ul>
+
+  <p class="about ending">Stopped in Sep 2026: with around 20 businesses the marketplace never became active, so we couldn't raise a pre-seed round to grow it.</p>
 </section>
 
 <section class="stack">
   <h2>Stack</h2>
-  <p>TypeScript · React Native (Expo, EAS) · Zod</p>
+  <p>TypeScript · React Native (Expo, EAS) · React · Next.js · Zod</p>
   <p>Node · Express · Prisma · Kysely · PostgreSQL (PostGIS) · Redis</p>
   <p>AppsFlyer · Resend · PostHog · Instagram Graph API · Stripe (Connect, PaymentSheet) · GitHub Actions</p>
   <p>Docker · AWS (App Runner, ECS Fargate, RDS, ElastiCache, S3/CloudFront, Amplify, Rekognition)</p>

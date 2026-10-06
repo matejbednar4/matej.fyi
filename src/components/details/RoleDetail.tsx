@@ -17,7 +17,7 @@ type Placement =
  * A role in full: who, what, when, and the numbers. A detail rather than a
  * preview even where it links, because the landing's card already says
  * everything the role's page says about the role itself; the page adds what
- * the company does and the work.
+ * the company does, why the role ended, and the work.
  *
  * As a card, the company is the heading and my title is its subtitle, the way
  * an entry on a CV reads, with the period at the far end of the label row. On
@@ -31,9 +31,9 @@ export function RoleDetail(props: { role: Role } & Placement) {
   const { role } = props;
 
   // No label above the numbers, and that was tried three ways. Every wording
-  // either overclaimed, since half of these are scale rather than a win, or
-  // restated the paragraph the chips already sit under. Each chip carries its
-  // own caption, so the row says what it is without a line telling it to.
+  // either overclaimed or restated the paragraph the chips already sit under.
+  // Each chip carries its own caption, so the row says what it is without a
+  // line telling it to.
   //
   // Equal columns rather than chips sized to their words: see `stat-grid`.
   // The number is the point of the chip, so it is the lede size in bold, a

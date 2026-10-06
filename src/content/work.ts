@@ -118,18 +118,17 @@ export const work: readonly WorkItem[] = [
     },
   },
   {
-    id: "v1-and-v2",
-    title: "Two versions of the API live at once",
-    body: "Ran v1 and v2 of Tagly's REST API side by side, because an app already on someone's phone can't be updated on demand. Every request and response shape a shipped build relied on had to keep working, even as the database behind the API changed. A whole product area was deleted from the database while its old fields stayed supported for older builds. Only the API contract was versioned, so everything behind the contract could keep changing. Every piece of compatibility code carried a marker saying when it could be removed: 19 markers in total. Retiring v1 took three steps:",
+    id: "why-no-mvp",
+    title: "Why Tagly couldn't ship as an MVP",
+    body: "For Tagly to work, we first had to pass Meta App Review, and passing it requires a full product, so Tagly couldn't ship as an MVP. Tagly also moved real money in both directions, which left no room for error. There's still a lot I decided against building:",
     bullets: [
-      "Built a minimum-version gate. Every request carries the app's version, and a build below the minimum is shown an update screen.",
-      "Raised the minimum version so every old install had to update, then waited out a safety window.",
-      "Deleted v1's endpoints, scanned for code that only v1 used, and dropped the database columns that only v1 wrote.",
+      "Job queues live in **Postgres** instead of a separate queue service, so there's nothing extra to run or pay for in each environment.",
+      "The REST API and all 7 background services ship as one **Docker image**, told apart by a single environment variable.",
+      "An admin approves every share by hand before it's paid, rather than leaving it to automation alone.",
+      "The admin app stayed internal: iOS only, English only, installed through **TestFlight**. It updates together with the backend, so it needs none of the compatibility code the public apps carry.",
     ],
-    outro:
-      "The whole cutover is written down as a repeatable procedure for the next version.",
     area: "fullstack",
-    meta: { role: "tagly", stack: ["express", "typescript"] },
+    meta: { role: "tagly", stack: ["postgres", "docker", "app-store-connect"] },
   },
   {
     id: "design-apps",
@@ -181,9 +180,23 @@ export const work: readonly WorkItem[] = [
     meta: { role: "tagly", stack: ["react-native", "expo"] },
   },
   {
+    id: "v1-and-v2",
+    title: "Two versions of the API live at once",
+    body: "Ran v1 and v2 of Tagly's REST API side by side, because an app already on someone's phone can't be updated on demand. Every request and response shape a shipped build relied on had to keep working, even as the database behind the API changed. A whole product area was deleted from the database while its old fields stayed supported for older builds. Only the API contract was versioned, so everything behind the contract could keep changing. Every piece of compatibility code carried a marker saying when it could be removed. Retiring v1 took three steps:",
+    bullets: [
+      "Built a minimum-version gate. Every request carries the app's version, and a build below the minimum is shown an update screen.",
+      "Raised the minimum version so every old install had to update, then waited out a safety window.",
+      "Deleted v1's endpoints, scanned for code that only v1 used, and dropped the database columns that only v1 wrote.",
+    ],
+    outro:
+      "The whole cutover is written down as a repeatable procedure for the next version.",
+    area: "fullstack",
+    meta: { role: "tagly", stack: ["express", "typescript"] },
+  },
+  {
     id: "schema",
     title: "Fifty-table schema",
-    body: "Designed Tagly's whole database, from accounts to the ledger and the job queues. The database has 50 tables, 546 columns, 33 enums and 73 foreign keys, and runs on **RDS**. Job queues live in their own schema, apart from the money and account data that has to last. **Prisma** handles the schema and ordinary queries, and **Kysely** handles the queries an ORM can't express. A few of the design decisions:",
+    body: "Designed Tagly's whole database, from accounts to the ledger and the job queues. The database has 50 tables and runs on **RDS**. Job queues live in their own schema, apart from the money and account data that has to last. **Prisma** handles the schema and ordinary queries, and **Kysely** handles the queries an ORM can't express. A few of the design decisions:",
     bullets: [
       "Half-finished sign-ups live in separate pending tables. A real customer row only exists once it has a name, a verified email and a signed agreement. Abandoned sign-ups are deleted on a schedule without touching real accounts.",
       "Money is stored in whole cents and multipliers in basis points, so important data never uses a float. Balances are built per currency, so supporting a new currency means adding a column, not converting data.",
@@ -196,7 +209,7 @@ export const work: readonly WorkItem[] = [
   {
     id: "shared-types",
     title: "All types are defined once, shared across the apps and the server",
-    body: "Built a shared package that defines every endpoint's request and response shape. Every app and service imports the same package, so the client and the server always agree on the shape of the data. The package holds 160 endpoint contracts and 46 DTOs. The backend validates every incoming request against these contracts, and the apps' SDK checks every response and logs any mismatch.",
+    body: "Built a shared package that defines every endpoint's request and response shape. Every app and service imports the same package, so the client and the server always agree on the shape of the data. The package holds 160 endpoint contracts. The backend validates every incoming request against these contracts, and the apps' SDK checks every response and logs any mismatch.",
     area: "fullstack",
     meta: { role: "tagly", stack: ["zod", "typescript", "express"] },
   },
@@ -301,7 +314,7 @@ export const work: readonly WorkItem[] = [
   {
     id: "design-system",
     title: "Shared design system across three apps",
-    body: "Built 53 components and 53 design tokens shared by all three apps, so a design change only happens once, in the shared package. One business-management form serves 9 different screens across the admin and business apps. Each screen hands the form its own pair of functions for reading and saving data.",
+    body: "Built the components and design tokens shared by all three apps, so a design change only happens once, in the shared package. One business-management form serves 9 different screens across the admin and business apps. Each screen hands the form its own pair of functions for reading and saving data.",
     area: "frontend",
     meta: { role: "tagly", stack: ["react-native", "typescript"] },
   },
@@ -329,7 +342,7 @@ export const work: readonly WorkItem[] = [
   {
     id: "localisation",
     title: "English and Czech across the apps and the backend",
-    body: "Localised Tagly into English and Czech, from the apps to the backend's notification and email templates. Every user-facing string lives in one of 292 translation files. The language follows the device's language, and units follow the device's measurement system. Users can change both in their preferences.",
+    body: "Localised Tagly into English and Czech, from the apps to the backend's notification and email templates. Every user-facing string lives in a translation file, with English typed as the source, so a string missing from English is a type error. The language follows the device's language, and units follow the device's measurement system. Users can change both in their preferences.",
     area: "fullstack",
     meta: { role: "tagly", stack: ["i18next", "react-native", "typescript"] },
   },

@@ -33,7 +33,21 @@ export type Role = {
    * way a technology without a licensed mark does.
    */
   logo?: string;
+  /**
+   * Outcomes, not output: what the work achieved, never how much of it there
+   * was. A count of endpoints or tables is scope, and scope belongs in the work
+   * item it describes.
+   */
   stats?: readonly { value: string; label: string }[];
+  /**
+   * Why the role is over, for one that is: its own section on the role's page,
+   * between my role and the work, and never on the landing's card. An end date
+   * a month after the best number on that card is the first thing a reader of
+   * the page asks about. The title is copy rather than derived, since leaving a
+   * company that carries on is not the company ending. Absent while the job is
+   * current.
+   */
+  ending?: { title: string; text: string };
 };
 
 export const roles = [
@@ -52,10 +66,12 @@ export const roles = [
       { value: "20+", label: "Paying businesses" },
       { value: "Peaked at #1", label: "CZ App Store, Lifestyle" },
       { value: "$100,000", label: "Raised" },
-      { value: "165", label: "Endpoints" },
-      { value: "50", label: "Database tables" },
       { value: "2 apps", label: "Live on both stores" },
     ],
+    ending: {
+      title: "Why Tagly ended",
+      text: "We stopped Tagly in September 2026. We were only live in Prague and still onboarded over 5,000 users and more than 20 paying businesses. But the marketplace wasn't dense enough to become active. Reaching that density meant raising a pre-seed round, and investors wanted to see the marketplace active first. It's like Uber with only 20 drivers: nobody would use it.",
+    },
   },
 ] as const satisfies readonly Role[];
 

@@ -189,10 +189,13 @@ on a `surface` tile the size of the avatar, drawn in `--color-ink`.
   Without a file it falls back to initials.
 - Every figure but the avatar is decorative: no alt text, no label.
 
-**`/roles/<id>`** is the intro, `My role at <company>` and `What I've done
-here`. `role.contribution` is what I did: required, and what every preview of
-the role shows. `role.about` is what the company does: optional, and only on
-its own page.
+**`/roles/<id>`** is the intro, `My role at <company>`, then for a job that is
+over a section titled by `role.ending` ("Why Tagly ended"), then `What I've
+done here`. `role.contribution` is what I did: required, and what every preview
+of the role shows. `role.about` is what the company does and `role.ending` why
+the job is over: both optional, and only on the role's own page. `role.stats`
+are outcomes (users, money raised, rankings), never output counts; scope belongs in
+the work item it describes.
 
 **`WorkFilter`** holds one piece of state, the area showing, and takes the
 cards as rendered `children`, so work items stay server-rendered. Showing all
