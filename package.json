@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "eslint",
     "content:check": "node scripts/content-check.mjs",
-    "icons:sync": "node scripts/sync-brand-icons.mjs"
+    "icons:sync": "node scripts/sync-brand-icons.mjs",
+    "cv": "swift cv/print.swift cv/cv.html public/cv.pdf && yarn cv:check",
+    "cv:check": "node cv/check.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.35.0",

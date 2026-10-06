@@ -40,13 +40,13 @@ export const roles = [
   {
     id: "tagly",
     company: "Tagly",
-    role: "Co-Founder & Lead Engineer",
+    role: "Co-Founder & Sole Engineer",
     period: "Jan 2025 to Sep 2026",
     logo: "/tagly-logo.png",
     about:
       "Tagly is a platform where local businesses pay their customers for posting about them on Instagram. Customers get rewarded based on the reach and audience fit of what they post and businesses get a new marketing channel without spending any time on it.",
     contribution:
-      "I co-founded Tagly and built the product on my own. We raised $100,000 and onboarded over 5,000 users. I built the three apps, the API and the seven workers behind them, a custom ledger, deposits and withdrawals through Stripe, and owned the deployment pipeline down to the App Store and Google Play reviews. Here are Tagly's biggest achievements:",
+      "I co-founded Tagly and built the product on my own. We raised $100,000 and onboarded over 5,000 users. I built the three apps, the REST API and the seven workers behind them, a custom ledger, deposits and withdrawals through Stripe, and owned the deployment pipeline down to the App Store and Google Play reviews. Here are Tagly's biggest achievements:",
     stats: [
       { value: "5,000+", label: "Users" },
       { value: "20+", label: "Paying businesses" },

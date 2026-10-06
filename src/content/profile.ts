@@ -29,19 +29,26 @@ export type ContactLink = {
   /**
    * Also a button in the Contact section. The rail lists every link; the
    * section only offers the ones that are a way to reach me, which a code
-   * profile is not.
+   * profile and the CV are not.
    */
   inContactSection: boolean;
   /**
    * Also in the landing's intro on a phone, beside the location. On a desktop
    * the rail shows every link beside the page; on a phone the rail is a drawer
-   * behind a button, so the way to write to me sits under the bio as well.
+   * behind a button, so the way to write to me and the CV sit under the bio
+   * as well.
    */
   inIntro: boolean;
 };
 
 export type Profile = {
   name: string;
+  /**
+   * My name as it is spelled in Czech, the way the CV writes it. Only the
+   * structured data reads it, as `alternateName`, so a search for either
+   * spelling finds the same person.
+   */
+  nativeName: string;
   /** The line above the name. A job title, not an entry in `roles.ts`. */
   role: string;
   /** The on-page opener. The search snippet is `site.description`. */
@@ -68,8 +75,9 @@ export type Profile = {
 
 export const profile = {
   name: "Matej Bednar",
+  nativeName: "Matěj Bednář",
   role: "Backend, mobile & DevOps engineer",
-  bio: "I built a two-sided marketplace end to end: three React Native apps, a 165-endpoint API, seven background services, and a double-entry ledger moving money in both directions. It runs in three environments, is deployed on AWS from CI, and I took it through App Store and Google Play review.",
+  bio: "I built a two-sided marketplace end to end: three React Native apps, a 165-endpoint REST API, seven background services, and a double-entry ledger moving money in both directions. It runs in three environments, deployed on AWS from CI. I took it through App Store and Google Play review.",
   location: "Prague, CZ",
   availability:
     "I'm looking for my next job. Building backend and mobile, and designing the systems and pipelines underneath, is what I know best, but I'd also be happy learning a new stack and getting more experience in a bigger team.",
@@ -84,7 +92,6 @@ export const profile = {
   languages: [
     { label: "Czech", level: "Native", flag: "🇨🇿" },
     { label: "English", level: "Fluent", flag: "🇬🇧" },
-    { label: "German", level: "Elementary", flag: "🇩🇪" },
   ],
 
   education: [
@@ -118,6 +125,13 @@ export const profile = {
       icon: "linkedin",
       inContactSection: true,
       inIntro: false,
+    },
+    {
+      label: "CV",
+      href: "/cv.pdf",
+      icon: "file",
+      inContactSection: false,
+      inIntro: true,
     },
   ],
 } as const satisfies Profile;

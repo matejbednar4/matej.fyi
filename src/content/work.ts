@@ -120,7 +120,7 @@ export const work: readonly WorkItem[] = [
   {
     id: "v1-and-v2",
     title: "Two versions of the API live at once",
-    body: "Ran v1 and v2 of Tagly's API side by side, because an app already on someone's phone can't be updated on demand. Every request and response shape a shipped build relied on had to keep working, even as the database behind the API changed. A whole product area was deleted from the database while its old fields stayed supported for older builds. Only the API contract was versioned, so everything behind the contract could keep changing. Every piece of compatibility code carried a marker saying when it could be removed: 19 markers in total. Retiring v1 took three steps:",
+    body: "Ran v1 and v2 of Tagly's REST API side by side, because an app already on someone's phone can't be updated on demand. Every request and response shape a shipped build relied on had to keep working, even as the database behind the API changed. A whole product area was deleted from the database while its old fields stayed supported for older builds. Only the API contract was versioned, so everything behind the contract could keep changing. Every piece of compatibility code carried a marker saying when it could be removed: 19 markers in total. Retiring v1 took three steps:",
     bullets: [
       "Built a minimum-version gate. Every request carries the app's version, and a build below the minimum is shown an update screen.",
       "Raised the minimum version so every old install had to update, then waited out a safety window.",
@@ -203,7 +203,7 @@ export const work: readonly WorkItem[] = [
   {
     id: "github-actions-pipelines",
     title: "Everything ships from GitHub Actions",
-    body: "Built the **GitHub Actions pipelines** that ship every part of Tagly, so nothing is deployed by hand. One pipeline ships the API and all 7 background services. Another builds and submits the apps, per environment and platform. A third deploys the marketing, landing and redirect sites. Each pipeline checks the result against what **AWS, EAS and Amplify** report back.",
+    body: "Built the **GitHub Actions pipelines** that ship every part of Tagly, so nothing is deployed by hand. One pipeline ships the REST API and all 7 background services. Another builds and submits the apps, per environment and platform. A third deploys the marketing, landing and redirect sites. Each pipeline checks the result against what **AWS, EAS and Amplify** report back.",
     area: "infra",
     meta: {
       role: "tagly",
@@ -343,14 +343,14 @@ export const work: readonly WorkItem[] = [
   {
     id: "rate-limits",
     title: "Rate limits on Redis",
-    body: "Built the rate limits that protect Tagly's API from abuse. There's one limit for signed-out traffic, one per logged-in account, and tighter limits on high-security endpoints like login. All the limits live in **Redis**, so each limit is shared across every server instead of counted per server.",
+    body: "Built the rate limits that protect Tagly's REST API from abuse. There's one limit for signed-out traffic, one per logged-in account, and tighter limits on high-security endpoints like login. All the limits live in **Redis**, so each limit is shared across every server instead of counted per server.",
     area: "backend",
     meta: { role: "tagly", stack: ["redis", "express"] },
   },
   {
     id: "error-tracking",
     title: "Errors and funnels tracked in PostHog",
-    body: "Set up error tracking and funnels in **PostHog**, so problems and drop-offs show up in one place. The API and all 7 background services send every error to PostHog. The customer and business apps report errors from their critical flows, and track how far people get through each funnel.",
+    body: "Set up error tracking and funnels in **PostHog**, so problems and drop-offs show up in one place. The REST API and all 7 background services send every error to PostHog. The customer and business apps report errors from their critical flows, and track how far people get through each funnel.",
     area: "infra",
     meta: { role: "tagly", stack: ["posthog"] },
   },

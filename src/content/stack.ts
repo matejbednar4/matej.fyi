@@ -88,7 +88,7 @@ export const stack = [
     label: "Node.js",
     group: "backend",
     icon: "nodedotjs",
-    note: "Tagly's API and its 7 background services all run on Node",
+    note: "Tagly's REST API and its 7 background services all run on Node",
   },
   { id: "express", label: "Express", group: "backend", icon: "express" },
 

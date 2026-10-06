@@ -82,7 +82,9 @@ export function StackItemPreview({
           <span className="grid size-12 place-items-center">
             <X className="size-8 text-accent" strokeWidth={2} aria-hidden />
           </span>
-          <span className={TILE_LABEL}>{item.label}</span>
+          {/* Drawn, not written: the front face already put the name in the
+              page's text, and written twice it reaches a parser as one word. */}
+          <span className={`${TILE_LABEL} drawn-text`} data-text={item.label} />
         </span>
       </button>
     </li>

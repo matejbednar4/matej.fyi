@@ -87,9 +87,12 @@ function FigureTile({ brand, icon: Icon }: { brand?: Brand; icon?: LucideIcon })
       ) : null}
 
       {brand && !brand.logo ? (
-        <span className="font-display text-3xl font-semibold">
-          {monogramFor(brand.label)}
-        </span>
+        // Drawn, not written, like `CustomMark`'s: the h1 beside it already
+        // names the company.
+        <span
+          className="drawn-text font-display text-3xl font-semibold"
+          data-text={monogramFor(brand.label)}
+        />
       ) : null}
     </span>
   );

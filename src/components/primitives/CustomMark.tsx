@@ -1,12 +1,13 @@
-import { Mail, MapPin } from "lucide-react";
+import { FileText, Mail, MapPin } from "lucide-react";
 
 import { iconFor, monogramFor } from "@/content";
 
 /**
- * Generic marks come from Lucide: an envelope and a map pin are shapes, not
- * trademarks, so there is no sourcing problem and no reason to hand-draw them.
+ * Generic marks come from Lucide: an envelope, a map pin and a page are shapes,
+ * not trademarks, so there is no sourcing problem and no reason to hand-draw
+ * them.
  */
-const GENERIC = { mail: Mail, pin: MapPin } as const;
+const GENERIC = { mail: Mail, pin: MapPin, file: FileText } as const;
 
 /**
  * What the mark sits on.
@@ -74,7 +75,7 @@ export function CustomMark({
   look,
   size,
 }: {
-  /** A sprite id from `brand-icons.ts`, or `mail` or `pin`. */
+  /** A sprite id from `brand-icons.ts`, or `mail`, `pin` or `file`. */
   name: string;
   /** What the monogram is derived from when there is no mark. */
   label: string;
@@ -116,9 +117,12 @@ export function CustomMark({
       ) : Generic ? (
         <Generic className={GLYPH[size]} strokeWidth={2} />
       ) : (
-        <span className={`${MONOGRAM[size]} font-bold tracking-tight`}>
-          {monogramFor(label, short)}
-        </span>
+        // Drawn, not written, so the letters do not join the label beside
+        // them in the page's text ("KyKysely").
+        <span
+          className={`${MONOGRAM[size]} drawn-text font-bold tracking-tight`}
+          data-text={monogramFor(label, short)}
+        />
       )}
     </span>
   );

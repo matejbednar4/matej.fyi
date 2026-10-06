@@ -1,0 +1,127 @@
+<!doctype html>
+<!--
+  The CV, served as /cv.pdf. This is the source: edit it here, then run
+  `yarn cv` to print public/cv.pdf and check it. Everything a visitor reads on
+  the site follows the copy rules in CLAUDE.md, and so does this.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Matěj Bednář</title>
+<meta name="author" content="Matěj Bednář">
+<style>
+  @page { size: A4; margin: 12mm 14mm 11mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    font-variation-settings: "opsz" 18;
+    /* Inter swaps in alternate brackets, dashes and tildes next to digits and
+       capitals. The alternates have no Unicode mapping, so they drop out of
+       the PDF's text layer and a parser reads "2025–2026" as "20252026". */
+    font-feature-settings: "calt" 0, "case" 0, "liga" 0;
+    font-size: 9.3pt;
+    line-height: 1.32;
+    color: #111;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  h1 { font-size: 21pt; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; }
+
+  .contact {
+    display: flex; flex-wrap: wrap; column-gap: 9pt; row-gap: 2pt;
+    margin-top: 5pt; font-size: 8pt; color: #555;
+  }
+  .contact span { display: inline-flex; align-items: center; gap: 4pt; }
+  .contact svg { width: 8.5pt; height: 8.5pt; flex: none; }
+  .contact .solid { fill: currentColor; stroke: none; }
+  /* One accent: the site's moss, --color-surface-alt on matej.fyi (the chips
+     and secondary buttons). */
+  h1, h2, h3, h4, .role .period { color: #243d27; }
+  section { border-top-color: rgb(36 61 39 / 0.4); }
+  li::marker { color: #243d27; }
+  .contact .site a { color: #243d27; text-decoration: underline; text-underline-offset: 1.5pt; text-decoration-thickness: 0.6pt; }
+
+  .summary { margin-top: 6pt; }
+
+  section { margin-top: 8pt; padding-top: 7pt; border-top: 0.75pt solid #8a8a8a; }
+  h2 { font-size: 10.2pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 5pt; }
+
+  .role { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; }
+  .role h3, .role .period { font-size: 10.4pt; font-weight: 600; }
+  /* The date's last glyph otherwise ends exactly on the page's content edge,
+     where Preview trims it. */
+  .role .period { white-space: nowrap; padding-right: 1.5pt; }
+  .about { font-size: 8.5pt; margin-top: 1pt; }
+
+  h4 { font-size: 9.8pt; font-weight: 600; margin-top: 6pt; margin-bottom: 1.5pt; }
+  ul { padding-left: 13pt; }
+  li { margin-bottom: 1pt; }
+  li::marker { font-size: 8pt; }
+
+  .stack p { margin-bottom: 1pt; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Matěj Bednář</h1>
+  <p class="contact">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Prague, CZ</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg><a href="mailto:me@matej.fyi">me@matej.fyi</a></span>
+    <span class="site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><a href="https://matej.fyi">matej.fyi</a></span>
+    <span><svg class="solid" viewBox="0 0 448 512" aria-hidden="true"><path d="M416 32L31.9 32C14.3 32 0 46.5 0 64.3L0 447.7C0 465.5 14.3 480 31.9 480L416 480c17.6 0 32-14.5 32-32.3l0-383.4C448 46.5 433.6 32 416 32zM135.4 416l-66.4 0 0-213.8 66.5 0 0 213.8-.1 0zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77zM384.3 416l-66.4 0 0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2z"/></svg><a href="https://www.linkedin.com/in/matejbednar4">linkedin.com/in/matejbednar4</a></span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Czech (Native), English (Fluent)</span>
+  </p>
+  <p class="summary">Backend, mobile &amp; DevOps engineer. Built and shipped a two-sided marketplace: 3 React Native apps, the API and workers behind them, payments in both directions, 2 of the 3 apps live on the App Store and Google Play with Meta approval for Instagram API access, deployed on AWS.</p>
+</header>
+
+<section>
+  <h2>Experience</h2>
+  <div class="role">
+    <h3>Tagly: Co-Founder &amp; Sole Engineer</h3>
+    <span class="period">Jan 2025 – Sep 2026</span>
+  </div>
+  <p class="about">Two-sided marketplace where local businesses pay their customers to post about them on Instagram, priced on reach and audience fit from the Instagram Graph API. <b>$100,000 raised, 5,000+ users, 20+ paying businesses, peaked at #1 in Lifestyle on the Czech App Store (15 Aug 2026).</b></p>
+
+  <h4>Backend &amp; Infrastructure</h4>
+  <ul>
+    <li>REST API with 165 endpoints, 50 Prisma models and 74 PostgreSQL migrations, with geospatial queries driving proximity ranking and audience-location weighting in reward pricing</li>
+    <li>Ran 7 background workers in 2 environments across 14 Fargate services (payments, Stripe reconciliation, Instagram data collection, push and email delivery, maintenance), advisory-locked against rolling deploys</li>
+    <li>Shared the API contract as typed packages across the monorepo: 160 endpoint schemas and 160 SDK functions, Zod-validated on both ends, consumed by all three apps and the backend</li>
+    <li>Built passwordless auth: email OTP with attempt limits and lockouts, Apple and Google sign-in, JWTs scoped per account type, and Redis rate limits shared across instances</li>
+    <li>Shipped everything from GitHub Actions (CI/CD): the API, 7 workers, app builds and 3 websites</li>
+  </ul>
+
+  <h4>Payments</h4>
+  <ul>
+    <li>Designed a double-entry ledger with 16 transaction kinds: deposits, withdrawals, refunds, share payments, referral payouts, locks, unlocks and adjustments</li>
+    <li>Every movement is one immutable row across six delta columns, with internal transfers aborting unless the deltas sum to zero; settlement is idempotent on a composite external reference, race-catching concurrent webhook replays</li>
+    <li>Integrated Stripe both directions: PaymentSheet and off-session card charges in, Connect Express payouts out, platform and Connect webhooks, with a reconciliation worker as delivery backstop</li>
+    <li>Built a 9-multiplier pricing engine computing payout value from live Instagram reach, audience geography and demographics, posting frequency and account quality</li>
+  </ul>
+
+  <h4>Mobile</h4>
+  <ul>
+    <li>Built three React Native apps from scratch: the customer and business apps are live on the App Store and Google Play, the admin app ships internally through TestFlight</li>
+    <li>Built the shared design system used by all three apps: 53 components and design tokens</li>
+    <li>Owned the release pipeline: EAS Build/Submit via GitHub Actions, three environments per app, TestFlight and Play Internal Testing, iOS credentials and Play App Signing</li>
+    <li>Attributed installs from physical QR codes using AppsFlyer: a per-sticker ID resolves to a business on our join page, then survives the store install via deferred deep links to auto-attribute on first open</li>
+    <li>Restructured onboarding after PostHog funnel tracking showed low completion: replaced Instagram-first sign-up with email OTP + Apple and Google OAuth, which doubled the completion rate</li>
+  </ul>
+</section>
+
+<section class="stack">
+  <h2>Stack</h2>
+  <p>TypeScript · React Native (Expo, EAS) · Zod</p>
+  <p>Node · Express · Prisma · Kysely · PostgreSQL (PostGIS) · Redis</p>
+  <p>AppsFlyer · Resend · PostHog · Instagram Graph API · Stripe (Connect, PaymentSheet) · GitHub Actions</p>
+  <p>Docker · AWS (App Runner, ECS Fargate, RDS, ElastiCache, S3/CloudFront, Amplify, Rekognition)</p>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <p>ČVUT FIT, Computer Science, 2025–2026</p>
+  <p>Left one semester in to build Tagly full-time.</p>
+</section>
+</body>
+</html>

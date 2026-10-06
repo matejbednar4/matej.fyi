@@ -162,6 +162,18 @@
   text-transform: uppercase;
 }
 
+/* Text the eye needs but the page's text must not contain: the second copy of
+   a stack tile's name, or the letters standing in for a missing logo. Painted
+   from `data-text` by a pseudo-element, which scrapers, search engines and
+   assistants reading the page skip, so the stack reads "Redis" once rather
+   than "RedisRedis". Screen readers are handled where it is used: the tile's
+   button has its own label, and a mark is `aria-hidden`. */
+@utility drawn-text {
+  &::before {
+    content: attr(data-text);
+  }
+}
+
 /* ==========================================================================
    Interaction. Every control gives one feedback, and each feedback is one
    `feedback-*` utility that writes both halves side by side: the hover on a

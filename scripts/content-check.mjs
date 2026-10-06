@@ -6,7 +6,7 @@
  * work behind it, and work attached to nothing at all.
  */
 import { execSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -51,6 +51,14 @@ try {
   for (const area of c.AREAS) {
     if (c.workIn(area).length === 0) {
       problems.push(`area "${area}" has no work behind it`);
+    }
+  }
+  // A link to a file on this site, like /cv.pdf, works only if the file is in
+  // public/ when Vercel builds. `*.pdf` is gitignored, so a file without its
+  // exception would build fine here and ship as a dead link.
+  for (const link of c.profile.links) {
+    if (link.href.startsWith("/") && !existsSync(join("public", link.href))) {
+      problems.push(`link "${link.label}" points to ${link.href}, which is not in public/`);
     }
   }
 

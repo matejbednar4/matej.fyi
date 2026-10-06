@@ -18,7 +18,7 @@ export const site = {
    * longer.
    */
   description:
-    "Backend, mobile & DevOps engineer in Prague. I built a two-sided marketplace end to end: three React Native apps, a 165-endpoint API and a double-entry ledger.",
+    "Backend, mobile & DevOps engineer in Prague. I built a two-sided marketplace: three React Native apps, a 165-endpoint REST API and a double-entry ledger.",
   /** The Open Graph locale, shared by every page's preview tags. */
   locale: "en_GB",
 } as const;

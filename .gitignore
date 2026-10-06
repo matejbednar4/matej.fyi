@@ -48,3 +48,5 @@ assets/
 
 tagly-build-record/
 *.pdf
+# The one PDF that ships: the CV, printed from cv/cv.html by `yarn cv`.
+!/public/cv.pdf

@@ -59,9 +59,9 @@ export const AREA_META: Record<
   backend: {
     label: "Backend",
     icon: Server,
-    tagline: "A 165-endpoint API and 7 background services.",
+    tagline: "A 165-endpoint REST API and 7 background services.",
     blurb:
-      "The API and the services behind it. 165 endpoints, 7 background workers, and the queries, caching and auth that sit under them.",
+      "The REST API and the services behind it. 165 endpoints, 7 background workers, and the queries, caching and auth that sit under them.",
   },
   infra: {
     label: "Infra",
@@ -82,7 +82,7 @@ export const AREA_META: Record<
     icon: Layers,
     tagline: "One typed contract shared by three apps and the server.",
     blurb:
-      "The work that only exists because there are two sides. One set of types for the API and the apps, two API versions live at once, and two languages kept in step.",
+      "The work that only exists because there are two sides. One set of types for the REST API and the apps, two API versions live at once, and two languages kept in step.",
   },
   design: {
     label: "Design",

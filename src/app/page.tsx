@@ -44,11 +44,15 @@ const SECTIONS = [
  * No `alumniOf`: schema.org stretches it to anyone who attended, but it reads
  * as "graduated from", and I left ČVUT after a semester. The page says so; the
  * data must not say more.
+ *
+ * `alternateName` is my name with its Czech diacritics, as the CV spells it,
+ * so a search typed either way lands on the same person.
  */
 const PERSON = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.name,
+  alternateName: profile.nativeName,
   url: `${site.url}/`,
   image: `${site.url}${profile.avatar}`,
   jobTitle: profile.role,
@@ -136,13 +140,13 @@ export default function Home() {
               <p className="mt-3 text-lede text-ink-muted">{profile.bio}</p>
 
               {/* Phone only. On a desktop the rail beside the page already
-                  says where I am, how to write to me and what I speak; on a
-                  phone the rail is a drawer behind a button, so the same facts
-                  sit here, under the bio, before the first section. Where I am
-                  and how to write to me share a line; the languages are
-                  context rather than a way to reach me, so they get their
-                  own, a step smaller. The email is a bare control, so its
-                  feedback is the accent. */}
+                  says where I am, how to write to me, where my CV is and what
+                  I speak; on a phone the rail is a drawer behind a button, so
+                  the same facts sit here, under the bio, before the first
+                  section. Where I am, how to write to me and the CV share a
+                  line; the languages are context rather than a way to reach
+                  me, so they get their own, a step smaller. The links are bare
+                  controls, so their feedback is the accent. */}
               <div className="mt-4 flex flex-col gap-2 md:hidden">
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-ui text-ink-muted">
                   <p className="flex items-center gap-2">

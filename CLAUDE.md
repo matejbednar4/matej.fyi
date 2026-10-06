@@ -75,6 +75,11 @@ src/
     index.ts                the only entry point: barrel + derived indexes
   utils/
     externalLink.ts         the attributes an anchor needs to leave the site
+cv/
+  cv.html                   the CV's source; `yarn cv` prints it to
+                            public/cv.pdf (served as /cv.pdf) and checks it
+  print.swift               HTML to A4 PDF through WebKit (macOS)
+  check.mjs                 fails unless the PDF's text matches cv.html
 tagly-build-record/         PRIVATE, gitignored, never committed
 ```
 
@@ -587,5 +592,13 @@ it passes. If it sounds like a landing page someone requested, rewrite it plain.
   lands a sub-page mid-scroll. Keep the attribute and the CSS together.
 - **A token read from script comes back as the CSS pipeline printed it:**
   `260ms` arrives as `.26s`. Parse it with its unit.
+- **The CV is `cv/cv.html`; `public/cv.pdf` is printed from it.** Edit the
+  HTML, run `yarn cv` (macOS, and `brew install poppler` for the check), and
+  commit both. It is a shipped page: the private-detail rule and the copy
+  rules apply, and its claims match the site's. The check fails when the PDF
+  spills onto a second page or its text drifts from the HTML; Inter's `calt`
+  and `case` stay off in it, or brackets and dashes vanish from that text.
+  `*.pdf` is gitignored with one exception for `public/cv.pdf`, and
+  `content:check` fails on a link to a file that is not in `public/`.
 - **Open:** the sub-pages set `title`, `description` and `canonical` but not
   `openGraph`, so a shared `/work/<area>` link previews with the landing's text.
