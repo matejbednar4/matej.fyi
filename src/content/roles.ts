@@ -70,7 +70,7 @@ export const roles = [
     ],
     ending: {
       title: "Why Tagly ended",
-      text: "We stopped Tagly in September 2026. We were only live in Prague and still onboarded over 5,000 users and more than 20 paying businesses. But the marketplace wasn't dense enough to become active. Reaching that density meant raising a pre-seed round, and investors wanted to see the marketplace active first. It's like Uber with only 20 drivers: nobody would use it.",
+      text: "We stopped Tagly in September 2026. We were only live in Prague and still onboarded over 5,000 users and more than 20 paying businesses. But the marketplace wasn't dense enough to become active. Reaching that density meant raising a pre-seed round, and investors wanted to see the marketplace active first. It's like Uber with only 20 drivers: people would sign up, but barely be able to use it.",
     },
   },
 ] as const satisfies readonly Role[];
