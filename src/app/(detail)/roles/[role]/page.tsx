@@ -102,6 +102,7 @@ export default async function RolePage({
         <PageHeader
           title={role.company}
           lede={role.about}
+          links={role.links}
           brand={{ label: role.company, logo: role.logo }}
         />
 

@@ -23,8 +23,8 @@ import { pathToFileURL } from "node:url";
 import * as fa from "@fortawesome/free-brands-svg-icons";
 import * as si from "simple-icons";
 
-/** Brands used outside the stack list, e.g. profile links in the rail. */
-const EXTRA = ["github", "linkedin", "applemusic"];
+/** Brands used outside the stack list: profile links in the rail, a role's links. */
+const EXTRA = ["github", "linkedin", "applemusic", "instagram"];
 
 /**
  * Marks simple-icons does not carry, because their owners restrict

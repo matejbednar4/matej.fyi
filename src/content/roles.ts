@@ -6,6 +6,8 @@
  * the person.
  */
 
+export type RoleLink = { label: string; href: string; icon: string };
+
 export type Role = {
   id: string;
   company: string;
@@ -34,6 +36,14 @@ export type Role = {
    */
   logo?: string;
   /**
+   * Where the company can still be seen, drawn as marks beside its name on the
+   * landing's card and on the role's page. For a company that no longer runs a
+   * site of its own, this is the proof it existed. `icon` is a sprite id from
+   * `brand-icons.ts`, and `label` is the link's accessible name, since only
+   * the mark is drawn.
+   */
+  links?: readonly RoleLink[];
+  /**
    * Outcomes, not output: what the work achieved, never how much of it there
    * was. A count of endpoints or tables is scope, and scope belongs in the work
    * item it describes.
@@ -57,6 +67,13 @@ export const roles = [
     role: "Co-Founder & Sole Engineer",
     period: "Jan 2025 to Sep 2026",
     logo: "/tagly-logo.png",
+    links: [
+      {
+        label: "Tagly on Instagram",
+        href: "https://www.instagram.com/tagly_cz/",
+        icon: "instagram",
+      },
+    ],
     about:
       "Tagly is a platform where local businesses pay their customers for posting about them on Instagram. Customers get rewarded based on the reach and audience fit of what they post and businesses get a new marketing channel without spending any time on it.",
     contribution:

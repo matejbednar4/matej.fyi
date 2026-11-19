@@ -69,6 +69,7 @@ export function RoleDetail(props: { role: Role } & Placement) {
         headingLevel={2}
         subtitle={role.role}
         topRight={role.period}
+        links={role.links}
       >
         <p>{role.contribution}</p>
         {stats}

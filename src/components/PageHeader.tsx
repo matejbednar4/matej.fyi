@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
-import { monogramFor } from "@/content";
+import { CustomButton } from "@/components/primitives/CustomButton";
+import { monogramFor, type RoleLink } from "@/content";
 
 /** A company, as the mark on its own page. */
 type Brand = { label: string; logo?: string };
@@ -31,18 +32,43 @@ type Figure =
 export function PageHeader({
   title,
   lede,
+  links,
   brand,
   icon: Icon,
 }: {
   title: string;
   /** The one paragraph that says what this page is about. */
   lede?: string;
+  /**
+   * Where the subject can be seen elsewhere, as small bare marks above the
+   * title.
+   */
+  links?: readonly RoleLink[];
 } & Figure) {
   return (
     <header>
       <div className="flex items-center gap-6">
         <FigureTile brand={brand} icon={Icon} />
-        <h1>{title}</h1>
+        {/* The marks go above the title, bare and small, where an eyebrow
+            would sit, rather than in a circle beside it: beside a title this
+            size a mark either looks off-centre or competes with the name. */}
+        <div className="flex min-w-0 flex-col gap-2">
+          {links?.length ? (
+            <div className="flex gap-4">
+              {links.map((link) => (
+                <CustomButton
+                  key={link.href}
+                  href={link.href}
+                  label={link.label}
+                  icon={link.icon}
+                  layout="icon"
+                  variant="bare"
+                />
+              ))}
+            </div>
+          ) : null}
+          <h1>{title}</h1>
+        </div>
       </div>
 
       {lede ? <p className="mt-6 text-lede text-ink-muted">{lede}</p> : null}

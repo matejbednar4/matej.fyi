@@ -1,6 +1,8 @@
 import { ArrowRight, Maximize2, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+
+import { CustomButton } from "@/components/primitives/CustomButton";
 import { externalLink } from "@/utils/externalLink";
 
 /**
@@ -78,6 +80,13 @@ type Content = {
    */
   subtitle?: string;
   /**
+   * Links to the thing elsewhere, drawn as marks right after the heading: a
+   * company's Instagram beside its name. Each is its own link, which matters
+   * on a card that is a link itself, since a link inside a link is invalid;
+   * see where the card is drawn for how the two sit together.
+   */
+  links?: readonly { label: string; href: string; icon: string }[];
+  /**
    * Everything under the heading: the prose, then whatever follows it. Pass
    * bare semantic elements and nothing else. The card supplies the type, the
    * colour and the gap between them, so a caller never writes a class here.
@@ -140,6 +149,7 @@ export function CustomCard({
   headingLevel = 1,
   topRight,
   subtitle,
+  links,
   children,
   action,
   actionIcon,
@@ -200,17 +210,40 @@ export function CustomCard({
   // same covering layer, so focus outlines the card rather than the label,
   // and the button's accessible name carries the heading, so six cards do not
   // read as six identical "Read in full" buttons.
+  //
+  // A link card with links of its own is built the same way, with a real
+  // anchor as the action: the card cannot be one `<a>` around the whole thing
+  // when there are other anchors inside it. The links sit above the covering
+  // layer, so a press on one goes to it and a press anywhere else to the card.
+  const coverClass = `${actionClass} no-underline focus-visible:outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:[box-shadow:var(--shadow-ring)] ${
+    ground === "surface-alt" ? "after:rounded-chip" : "after:rounded-card"
+  }`;
+  const covered = Boolean(onPress || (href && action && links?.length));
+
   const actionRow = !action ? null : onPress ? (
     <button
       type="button"
       onClick={onPress}
       aria-label={`${action}: ${heading}`}
-      className={`${actionClass} cursor-pointer focus-visible:outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:[box-shadow:var(--shadow-ring)] ${
-        ground === "surface-alt" ? "after:rounded-chip" : "after:rounded-card"
-      }`}
+      className={`${coverClass} cursor-pointer`}
     >
       {actionLabel}
     </button>
+  ) : href && covered ? (
+    href.startsWith("/") ? (
+      <Link href={href} aria-label={`${action}: ${heading}`} className={coverClass}>
+        {actionLabel}
+      </Link>
+    ) : (
+      <a
+        href={href}
+        aria-label={`${action}: ${heading}`}
+        className={coverClass}
+        {...externalLink(href)}
+      >
+        {actionLabel}
+      </a>
+    )
   ) : (
     <span className={actionClass}>{actionLabel}</span>
   );
@@ -268,6 +301,23 @@ export function CustomCard({
           ) : null}
           {mark}
           <Heading className={headingClass}>{heading}</Heading>
+          {/* Above the card's covering layer, so each mark is its own target.
+              A chip on the card's surface, and the card colour on a chip-
+              coloured card, so the circle never vanishes into its ground. */}
+          {links?.length ? (
+            <span className="relative z-10 ml-1 flex gap-2">
+              {links.map((link) => (
+                <CustomButton
+                  key={link.href}
+                  href={link.href}
+                  label={link.label}
+                  icon={link.icon}
+                  layout="icon"
+                  variant={tone === "alt" ? "surface" : "secondary"}
+                />
+              ))}
+            </span>
+          ) : null}
         </div>
 
         {subtitle ? (
@@ -312,9 +362,9 @@ export function CustomCard({
   // the arrow slid, so it looked as if nothing moved.
   const responds = "group feedback-shadow pressable press-large";
 
-  // `relative` so the button's covering layer spans this card and no further.
+  // `relative` so the action's covering layer spans this card and no further.
   // The card is hovered and pressed through that layer, which is its child.
-  if (onPress) {
+  if (covered) {
     return <div className={`${base} relative ${responds}`}>{content}</div>;
   }
   if (!href) return <div className={base}>{content}</div>;
