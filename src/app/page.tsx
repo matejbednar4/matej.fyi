@@ -1,3 +1,5 @@
+import { Clapperboard } from "lucide-react";
+
 import { WorkAreaPreview } from "@/components/previews/WorkAreaPreview";
 import { CustomButton } from "@/components/primitives/CustomButton";
 import { CustomCard } from "@/components/primitives/CustomCard";
@@ -11,6 +13,8 @@ import { WorkHighlights } from "@/components/WorkHighlights";
 import {
   AREAS,
   STACK_GROUP_LABEL,
+  demos,
+  demosPage,
   highlights,
   profile,
   roles,
@@ -29,6 +33,7 @@ const SECTIONS = [
   { id: "about", label: "About" },
   { id: "roles", label: "Roles" },
   { id: "highlights", label: "Highlights" },
+  { id: "demos", label: "Demos" },
   { id: "stack", label: "Stack" },
   { id: "work", label: "Work" },
   { id: "contact", label: "Contact" },
@@ -221,6 +226,25 @@ export default function Home() {
           subtitle="The work I'm proudest of"
         >
           <WorkHighlights items={highlights} />
+        </CustomSection>
+
+        {/* The door to the recordings, right after the work they show: one
+            card rather than the videos themselves, because each needs the
+            context its page gives it. */}
+        <CustomSection
+          id="demos"
+          title="Demos"
+          subtitle="The product, recorded"
+        >
+          <CustomCard
+            icon={Clapperboard}
+            href="/demos"
+            action={`Watch all ${demos.length}`}
+            heading="Tagly, end to end"
+            headingLevel={3}
+          >
+            <p>{demosPage.description}</p>
+          </CustomCard>
         </CustomSection>
 
         {/* The one section that has to be interactive, so the grids move into a

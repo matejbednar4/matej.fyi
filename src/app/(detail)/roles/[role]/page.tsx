@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PageHeader } from "@/components/PageHeader";
+import { CustomButton } from "@/components/primitives/CustomButton";
 import { Sidebar } from "@/components/Sidebar";
 import { WorkFilter } from "@/components/WorkFilter";
 import { CustomSection } from "@/components/primitives/CustomSection";
@@ -10,6 +11,7 @@ import { WorkItemDetail } from "@/components/details/WorkItemDetail";
 import {
   AREAS,
   AREA_META,
+  demos,
   profile,
   roles,
   site,
@@ -73,6 +75,8 @@ export default async function RolePage({
   // Kinds of work this role actually holds, in the areas' own order. An empty
   // area is dropped here rather than in the filter, so the chip row never
   // offers a count of nothing.
+  const roleDemos = demos.filter((demo) => demo.role === role.id);
+
   const areasWorkedIn = AREAS.map((area) => ({
     area,
     items: workAt(role.id, area),
@@ -115,6 +119,20 @@ export default async function RolePage({
         {role.ending ? (
           <CustomSection id="ending" title={role.ending.title}>
             <p className="text-lede text-ink-muted">{role.ending.text}</p>
+          </CustomSection>
+        ) : null}
+
+        {/* A way to the recordings from the company they show, before the
+            work, which carries the same videos beside the claims they prove. */}
+        {roleDemos.length > 0 ? (
+          <CustomSection id="demos" title={`See ${role.company} working`}>
+            <div className="flex flex-wrap gap-3">
+              <CustomButton
+                href="/demos"
+                label={`Watch the ${roleDemos.length} demos`}
+                variant="secondary"
+              />
+            </div>
           </CustomSection>
         ) : null}
 

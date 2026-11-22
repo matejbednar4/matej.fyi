@@ -41,14 +41,22 @@ export type WorkItem = {
   /** One closing sentence after a list. */
   outro?: string;
   /**
-   * Screenshots, where a claim is better shown than described. Drawn as a row
-   * of thumbnails at one height, each opening to its own size.
+   * Screenshots and screen recordings, where a claim is better shown than
+   * described. Drawn as a row of thumbnails at one height, each opening to its
+   * own size.
    *
    * `alt` is required and is not decorative: these are evidence, so a reader
    * who cannot see them still has to learn what they prove.
    */
   media?: readonly {
+    /** The picture, or for a recording, a still from it. */
     src: string;
+    /**
+     * A screen recording that plays when the thumbnail is opened. The same
+     * files as the role's `recordings`; a `#t=` fragment opens it at the part
+     * this claim is about.
+     */
+    video?: string;
     alt: string;
     /** The visible line under the thumbnail: what the shot is, in a few words. */
     caption: string;
@@ -234,6 +242,12 @@ export const work: readonly WorkItem[] = [
           "Physical stickers placed in partnered businesses, linked via an ID",
         alt: "A Tagly counter sticker: a QR code beside the line asking customers to share the business on Instagram for a reward.",
       },
+      {
+        src: "/work/tagly-sticker-signup.webp",
+        video: "/work/tagly-sticker-signup.mp4",
+        caption: "From the sticker to a referred sign-up",
+        alt: "A business sets the referral code tagly-test, an admin assigns sticker 000223 to it, and a customer scans the sticker, goes through the invite page and the App Store, signs up, and finds tagly-test as their referrer in settings.",
+      },
     ],
     area: "infra",
     meta: { role: "tagly", stack: ["appsflyer", "next", "expo"] },
@@ -242,6 +256,14 @@ export const work: readonly WorkItem[] = [
     id: "share-anti-fraud",
     title: "Anti-fraud checks for each share",
     body: "Built the checks that stop Tagly from paying for a fake or repeated share. Every share has to pass **AWS Rekognition**, which reads the picture to confirm the right business was tagged. A cap in the pricing stops reshares from inflating a post's reach. A record of paid posts survives account deletion, so the same post can't be paid twice. Banned Instagram accounts are kept on a list, so a banned account can't be linked to a new Tagly account.",
+    media: [
+      {
+        src: "/work/tagly-share-untagged.webp",
+        video: "/work/tagly-share-flow.mp4#t=29",
+        caption: "A story that doesn't tag the business, turned down",
+        alt: "A customer picks a story of two pizzas to share for Core Pilates, and Tagly refuses because the story doesn't tag Core Pilates. The same story then goes through for Italian Corner, which it does tag.",
+      },
+    ],
     area: "backend",
     meta: { role: "tagly", stack: ["aws", "instagram-graph"] },
   },
@@ -249,6 +271,14 @@ export const work: readonly WorkItem[] = [
     id: "three-payment-methods",
     title: "Three ways for a business to pay",
     body: "Built the 3 ways a business can pay on Tagly: prepaid credits, pay-as-you-go, and automatic monthly top-ups. Credits are a one-off payment with no card kept on file. Pay-as-you-go charges a saved card whenever someone shares the business. Monthly top-ups refill the credit balance from the saved card at the start of each month. In the app, payments go through **Stripe's native payment sheet**. The sheet reporting success isn't proof the money moved, so the app only shows success once the backend has confirmed the payment.",
+    media: [
+      {
+        src: "/work/tagly-business-onboarding.webp",
+        video: "/work/tagly-business-onboarding.mp4#t=20",
+        caption: "Buying credits with Apple Pay, in test mode",
+        alt: "A new business picks $250 of prepaid credits and pays through Stripe's payment sheet with Apple Pay in test mode. The wallet then shows the credits, and the app offers a monthly top-up.",
+      },
+    ],
     area: "payments",
     meta: {
       role: "tagly",
@@ -322,6 +352,14 @@ export const work: readonly WorkItem[] = [
     id: "onboarding-rebuild",
     title: "Completely restructured onboarding based on funnel data",
     body: "Rebuilt Tagly's onboarding after the funnel showed a big drop-off at the first step, connecting Instagram. Onboarding now starts with an email code, or Apple or Google sign-in. Connecting Instagram moved to the end and became optional, which doubled the onboarding completion rate.",
+    media: [
+      {
+        src: "/work/tagly-sticker-signup-instagram.webp",
+        video: "/work/tagly-sticker-signup.mp4#t=45",
+        caption: "Instagram last, with Skip for now",
+        alt: "A new customer's onboarding: sign-in with Google, notifications, name, gender and interests, then Connect Instagram as the last step with a Skip for now button, which lands on the map.",
+      },
+    ],
     area: "data",
     meta: { role: "tagly", stack: ["posthog", "react-native"] },
   },
@@ -349,7 +387,21 @@ export const work: readonly WorkItem[] = [
   {
     id: "share-lifecycle",
     title: "From a customer's Instagram story to a payout",
-    body: "Built the lifecycle every share on Tagly goes through, from a customer posting a story to Instagram to getting paid for it. An admin approves each share. 24 hours after the story goes up, a worker collects the post's data and a snapshot of the customer's profile. A share is only paid out once both steps are done. The price comes from the pricing engine, based on the collected data.",
+    body: "Built the lifecycle every share on Tagly goes through, from a customer posting a story to Instagram to getting paid for it. An admin approves each share. 24 hours after the story goes up, a worker collects the post's data and a snapshot of the customer's profile. A share is only paid out once both steps are done. The price comes from the pricing engine, based on the collected data. Opening the app within 50 metres of a business, with a story that tags it, offers the share straight away.",
+    media: [
+      {
+        src: "/work/tagly-share-flow.webp",
+        video: "/work/tagly-share-flow.mp4",
+        caption: "A share across all three apps",
+        alt: "A customer shares an Instagram story of two pizzas at Italian Corner. A story that doesn't tag Core Pilates is rejected for it. An admin approves the share, the business rates it five stars, and the customer's reward multiplier rises from 1.00x to 1.07x.",
+      },
+      {
+        src: "/work/tagly-business-suggestion.webp",
+        video: "/work/tagly-business-suggestion.mp4",
+        caption: "The share offered on opening the app",
+        alt: "A customer posts an Instagram story tagged Sushi Garden, opens Tagly, and is asked whether they want to share Sushi Garden, with the story and an estimated reward shown. They confirm and the share goes under review.",
+      },
+    ],
     area: "backend",
     meta: { role: "tagly", stack: ["instagram-graph", "postgres", "prisma"] },
   },

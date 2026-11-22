@@ -116,6 +116,7 @@ export function WorkItemDetail({
                   shape="square"
                   ground="card"
                   src={shot.src}
+                  video={shot.video}
                   alt={shot.alt}
                   caption={shot.caption}
                 />

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { Play } from "lucide-react";
 
 import { CustomModal } from "@/components/primitives/CustomModal";
 
@@ -9,10 +11,14 @@ import { CustomModal } from "@/components/primitives/CustomModal";
  * cropped to its centre, because a row mixing a tall phone screenshot with a
  * wide photograph has no baseline to sit on. The square has no size of its own:
  * it fills the width it is given, so the grid it sits in decides how big it is.
+ * `natural` keeps the picture's own proportions at that width, for a picture
+ * shown alone, where there is no row to line up with: a phone recording reads
+ * as a phone.
  */
 const SHAPE = {
   circle: "size-24 rounded-pill",
   square: "aspect-square w-full rounded-card",
+  natural: "w-full rounded-card",
 } as const;
 
 /**
@@ -32,11 +38,16 @@ const GROUND = {
 
 /**
  * Any picture that opens to its full size: my face at the top of a page, and
- * the screenshots under a piece of work.
+ * the screenshots and screen recordings under a piece of work.
  *
  * The thumbnail is `object-cover`, a window onto the file rather than a squashed
  * copy of it, and the full frame opens in a `CustomModal`. It is only
  * requested when someone opens it, since the dialog draws nothing while shut.
+ *
+ * With a `video`, the thumbnail is a still from it with a play mark over it,
+ * and the dialog plays the recording instead of showing the still. The video
+ * stays mounted once it has been opened, because the dialog keeps drawing its
+ * last item, so it is paused on close and picks up where it was on reopen.
  *
  * A client component, because opening is its whole job and something has to
  * hold whether it is open.
@@ -44,6 +55,7 @@ const GROUND = {
 export function CustomMedia({
   src,
   full = src,
+  video,
   alt,
   caption,
   shape,
@@ -54,6 +66,12 @@ export function CustomMedia({
   src: string;
   /** The full frame, where it is a different file from the thumbnail. */
   full?: string;
+  /**
+   * A screen recording to play in the dialog, with `src` a still from it. May
+   * carry a media fragment (`#t=30`) to open partway in; the controls can
+   * still seek back to the start.
+   */
+  video?: string;
   /** What the picture shows. Required: these are evidence, not decoration. */
   alt: string;
   /** A few words over the foot of the thumbnail, and under the full picture. */
@@ -65,6 +83,16 @@ export function CustomMedia({
   priority?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const player = useRef<HTMLVideoElement>(null);
+
+  // The dialog mounts the video on the same commit it opens, so the ref is
+  // set by the time this runs. Muted, so no browser refuses the play.
+  useEffect(() => {
+    const element = player.current;
+    if (!element) return;
+    if (open) element.play().catch(() => {});
+    else element.pause();
+  }, [open]);
 
   return (
     <>
@@ -73,19 +101,34 @@ export function CustomMedia({
         onClick={() => setOpen(true)}
         // The visible caption names it when there is one, so the alt text stays
         // free to describe the full picture rather than being read twice.
-        aria-label={`${caption ?? alt}. Open the full picture.`}
+        aria-label={`${caption ?? alt}. ${video ? "Play the video" : "Open the full picture"}.`}
         className={`${GROUND[ground]} pressable press-none feedback-grow flex shrink-0 cursor-pointer flex-col overflow-hidden ${SHAPE[shape]}`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element --
-            image optimisation is off under output: "export", so this is what
-            next/image would emit anyway. */}
-        <img
-          src={src}
-          alt=""
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : undefined}
-          className="min-h-0 w-full flex-1 object-cover"
-        />
+        <span className="relative flex min-h-0 w-full flex-1">
+          {/* eslint-disable-next-line @next/next/no-img-element --
+              image optimisation is off under output: "export", so this is
+              what next/image would emit anyway. */}
+          <img
+            src={src}
+            alt=""
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : undefined}
+            className="min-h-0 w-full flex-1 object-cover"
+          />
+
+          {/* Floating over the picture, so it keeps the shadow the dialog's
+              close control keeps over content. */}
+          {video ? (
+            <span
+              aria-hidden
+              className="absolute inset-0 grid place-items-center"
+            >
+              <span className="grid size-10 place-items-center rounded-pill bg-surface-alt text-ink [box-shadow:var(--shadow-gloss),var(--shadow-card)]">
+                <Play className="size-4 translate-x-px" strokeWidth={2} fill="currentColor" />
+              </span>
+            </span>
+          ) : null}
+        </span>
 
         {/* The caption at the foot of the tile, on a strip of the secondary
             ground, the one a stack panel sits on, so it reads as a label set
@@ -111,17 +154,33 @@ export function CustomMedia({
 
       <CustomModal
         kind="image"
-        item={open ? full : null}
+        item={open ? (video ?? full) : null}
         onClose={() => setOpen(false)}
       >
         {(source) => (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element -- as above */}
-            <img
-              src={source}
-              alt={alt}
-              className="max-h-[88dvh] w-auto max-w-full rounded-card object-contain [box-shadow:var(--shadow-card)]"
-            />
+            {video ? (
+              // No captions track: the recordings have no sound, and what is
+              // said in them is written into the picture.
+              <video
+                ref={player}
+                src={source}
+                poster={src}
+                aria-label={alt}
+                controls
+                muted
+                playsInline
+                preload="metadata"
+                className="max-h-[88dvh] w-auto max-w-full rounded-card object-contain [box-shadow:var(--shadow-card)]"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element -- as above
+              <img
+                src={source}
+                alt={alt}
+                className="max-h-[88dvh] w-auto max-w-full rounded-card object-contain [box-shadow:var(--shadow-card)]"
+              />
+            )}
             {caption ? (
               <p className="mt-3 text-center text-meta text-ink-muted">
                 {caption}

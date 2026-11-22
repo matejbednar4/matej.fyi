@@ -20,5 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/` },
     ...roles.map((role) => ({ url: `${site.url}/roles/${role.id}/` })),
     ...AREAS.map((area) => ({ url: `${site.url}/work/${area}/` })),
+    { url: `${site.url}/demos/` },
   ];
 }

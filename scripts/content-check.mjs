@@ -62,6 +62,21 @@ try {
     }
   }
 
+  // Pictures and recordings are plain paths into public/, and a typo there
+  // builds fine and ships as a blank tile or a dialog that never plays.
+  const files = [
+    ...c.work.flatMap((item) =>
+      (item.media ?? []).flatMap((m) => [m.src, m.video ?? ""]),
+    ),
+    ...c.demos.flatMap((demo) => [demo.poster, demo.video]),
+  ].filter(Boolean);
+  for (const file of files) {
+    const path = file.split("#")[0];
+    if (!existsSync(join("public", path))) {
+      problems.push(`${file} is used as media but is not in public/`);
+    }
+  }
+
   const used = c.stack.length - c.unusedStack.length;
   console.log(`${c.work.length} work items, ${c.roles.length} roles, ${c.stack.length} stack entries`);
   console.log(`${used}/${c.stack.length} stack entries have evidence`);
