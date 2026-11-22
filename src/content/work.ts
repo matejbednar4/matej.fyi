@@ -80,6 +80,12 @@ export const work: readonly WorkItem[] = [
         caption: "Number one in Lifestyle, Czech App Store",
         alt: "The Czech App Store's Top Downloaded Lifestyle chart, with Tagly at number one above Pinterest.",
       },
+      {
+        src: "/work/tagly-business-onboarding-app-store.webp",
+        video: "/work/tagly-business-onboarding.mp4",
+        caption: "Tagly Partner, downloaded from the App Store",
+        alt: "A business searches the App Store for Tagly Partner, downloads it and signs up, then buys credits and creates its business page.",
+      },
     ],
     area: "fullstack",
     meta: {
@@ -243,8 +249,8 @@ export const work: readonly WorkItem[] = [
         alt: "A Tagly counter sticker: a QR code beside the line asking customers to share the business on Instagram for a reward.",
       },
       {
-        src: "/work/tagly-sticker-signup.webp",
-        video: "/work/tagly-sticker-signup.mp4",
+        src: "/work/tagly-deeplink-referrals.webp",
+        video: "/work/tagly-deeplink-referrals.mp4",
         caption: "From the sticker to a referred sign-up",
         alt: "A business sets the referral code tagly-test, an admin assigns sticker 000223 to it, and a customer scans the sticker, goes through the invite page and the App Store, signs up, and finds tagly-test as their referrer in settings.",
       },
@@ -258,10 +264,10 @@ export const work: readonly WorkItem[] = [
     body: "Built the checks that stop Tagly from paying for a fake or repeated share. Every share has to pass **AWS Rekognition**, which reads the picture to confirm the right business was tagged. A cap in the pricing stops reshares from inflating a post's reach. A record of paid posts survives account deletion, so the same post can't be paid twice. Banned Instagram accounts are kept on a list, so a banned account can't be linked to a new Tagly account.",
     media: [
       {
-        src: "/work/tagly-share-untagged.webp",
-        video: "/work/tagly-share-flow.mp4#t=29",
+        src: "/work/tagly-share-wrong-tag.webp",
+        video: "/work/tagly-share-wrong-tag.mp4",
         caption: "A story that doesn't tag the business, turned down",
-        alt: "A customer picks a story of two pizzas to share for Core Pilates, and Tagly refuses because the story doesn't tag Core Pilates. The same story then goes through for Italian Corner, which it does tag.",
+        alt: "A customer posts a story tagged Italian Corner, then tries to share it for Core Pilates. Tagly shows that the story needs to mention Core Pilates and offers to choose or post another story.",
       },
     ],
     area: "backend",
@@ -273,10 +279,10 @@ export const work: readonly WorkItem[] = [
     body: "Built the 3 ways a business can pay on Tagly: prepaid credits, pay-as-you-go, and automatic monthly top-ups. Credits are a one-off payment with no card kept on file. Pay-as-you-go charges a saved card whenever someone shares the business. Monthly top-ups refill the credit balance from the saved card at the start of each month. In the app, payments go through **Stripe's native payment sheet**. The sheet reporting success isn't proof the money moved, so the app only shows success once the backend has confirmed the payment.",
     media: [
       {
-        src: "/work/tagly-business-onboarding.webp",
-        video: "/work/tagly-business-onboarding.mp4#t=20",
-        caption: "Buying credits with Apple Pay, in test mode",
-        alt: "A new business picks $250 of prepaid credits and pays through Stripe's payment sheet with Apple Pay in test mode. The wallet then shows the credits, and the app offers a monthly top-up.",
+        src: "/work/tagly-business-wallet.webp",
+        video: "/work/tagly-business-wallet.mp4",
+        caption: "All three ways to pay, in test mode",
+        alt: "In the business wallet, a business buys $250 of credits with Apple Pay through Stripe in test mode, links a card for a monthly top-up, changes its monthly budget from $250 to $300, and turns on pay as you go.",
       },
     ],
     area: "payments",
@@ -296,6 +302,14 @@ export const work: readonly WorkItem[] = [
     id: "login-methods",
     title: "Sign-in and per-account auth",
     body: "Built sign-in and authentication across Tagly. Customers and businesses sign in with an email and a one-time code, or with Apple or Google. Customers can also sign in with Instagram, offered for anyone who's forgotten their email. One-time codes have attempt limits, resend limits and lockouts. After sign-in, every request carries a JWT with the caller's public uid. The uid's prefix is different for each account type, so the backend knows whether a customer, a business or an admin is calling. Each endpoint is only reachable by the account type it was built for.",
+    media: [
+      {
+        src: "/work/tagly-business-onboarding-sign-in.webp",
+        video: "/work/tagly-business-onboarding.mp4#t=8",
+        caption: "Signing in with an emailed code",
+        alt: "A new business enters its email on the sign-in screen, beside the Apple and Google options, then types the six-digit code Tagly emailed it.",
+      },
+    ],
     area: "backend",
     meta: { role: "tagly", stack: ["express", "resend", "typescript"] },
   },
@@ -354,10 +368,10 @@ export const work: readonly WorkItem[] = [
     body: "Rebuilt Tagly's onboarding after the funnel showed a big drop-off at the first step, connecting Instagram. Onboarding now starts with an email code, or Apple or Google sign-in. Connecting Instagram moved to the end and became optional, which doubled the onboarding completion rate.",
     media: [
       {
-        src: "/work/tagly-sticker-signup-instagram.webp",
-        video: "/work/tagly-sticker-signup.mp4#t=45",
+        src: "/work/tagly-deeplink-referrals-instagram.webp",
+        video: "/work/tagly-deeplink-referrals.mp4#t=36",
         caption: "Instagram last, with Skip for now",
-        alt: "A new customer's onboarding: sign-in with Google, notifications, name, gender and interests, then Connect Instagram as the last step with a Skip for now button, which lands on the map.",
+        alt: "A new customer's onboarding: sign-in, notifications, name, gender and interests, then Connect Instagram as the last step, which they skip for now before landing on the map.",
       },
     ],
     area: "data",
@@ -372,6 +386,12 @@ export const work: readonly WorkItem[] = [
         src: "/work/map.webp",
         caption: "Tagly's map screen",
         alt: "The map screen, each nearby business pinned with what a customer could earn for sharing it.",
+      },
+      {
+        src: "/work/tagly-share-customer-map.webp",
+        video: "/work/tagly-share-customer.mp4#t=16",
+        caption: "Finding a business on the map",
+        alt: "A customer pans Tagly's map of Prague, where each business is pinned with what they could earn, and opens Italian Corner.",
       },
     ],
     area: "frontend",
@@ -390,14 +410,14 @@ export const work: readonly WorkItem[] = [
     body: "Built the lifecycle every share on Tagly goes through, from a customer posting a story to Instagram to getting paid for it. An admin approves each share. 24 hours after the story goes up, a worker collects the post's data and a snapshot of the customer's profile. A share is only paid out once both steps are done. The price comes from the pricing engine, based on the collected data. Opening the app within 50 metres of a business, with a story that tags it, offers the share straight away.",
     media: [
       {
-        src: "/work/tagly-share-flow.webp",
-        video: "/work/tagly-share-flow.mp4",
+        src: "/work/tagly-share-full.webp",
+        video: "/work/tagly-share-full.mp4",
         caption: "A share across all three apps",
-        alt: "A customer shares an Instagram story of two pizzas at Italian Corner. A story that doesn't tag Core Pilates is rejected for it. An admin approves the share, the business rates it five stars, and the customer's reward multiplier rises from 1.00x to 1.07x.",
+        alt: "A customer posts an Instagram story of two pizzas tagged Italian Corner, finds the business on Tagly's map and shares the story. An admin approves the share, the business rates it five stars, and the customer's reward multiplier shows 1.07x.",
       },
       {
-        src: "/work/tagly-business-suggestion.webp",
-        video: "/work/tagly-business-suggestion.mp4",
+        src: "/work/tagly-share-suggestion.webp",
+        video: "/work/tagly-share-suggestion.mp4",
         caption: "The share offered on opening the app",
         alt: "A customer posts an Instagram story tagged Sushi Garden, opens Tagly, and is asked whether they want to share Sushi Garden, with the story and an estimated reward shown. They confirm and the share goes under review.",
       },
@@ -469,6 +489,12 @@ export const work: readonly WorkItem[] = [
         src: "/work/invite-page.webp",
         caption: "Tagly's user-facing invite page",
         alt: "The invite page on a phone, with the App Store link and a row of recent payouts.",
+      },
+      {
+        src: "/work/tagly-deeplink-referrals-invite.webp",
+        video: "/work/tagly-deeplink-referrals.mp4#t=28",
+        caption: "The invite page, opened from a sticker",
+        alt: "A customer scans a Tagly sticker, which opens the invite page for Italian Corner, then the App Store.",
       },
     ],
     area: "frontend",
