@@ -45,7 +45,10 @@ src/
       layout.tsx            the page shell both sub-pages share
       roles/[role]/page.tsx   /roles/<id>, everything done in one role
       work/[area]/page.tsx    /work/<area>, everything of one kind
-      demos/page.tsx          /demos, the screen recordings with context
+      demos/page.tsx          /demos, a meta-refresh redirect to the first
+                              role with demos
+      demos/[role]/page.tsx   /demos/<role>, one role's recordings with
+                              context
   components/
     primitives/             CustomButton, CustomCard, CustomMark,
                             CustomMedia, CustomModal, CustomSection
@@ -55,7 +58,8 @@ src/
       WorkItemPreview.tsx   a piece of work as a stack-panel row or a
                             Highlights card, both opening a dialog
     details/                each is the thing in full
-      DemoDetail.tsx        one recording and its context, a /demos section
+      DemoDetail.tsx        one recording and its context, a section of
+                            /demos/<role>
       RoleDetail.tsx        a role: a card on the landing, the bare section
                             on its own page; draws the numbers
       StackItemDetail.tsx   the panel a tile opens: a tool and its work
@@ -75,7 +79,8 @@ src/
     roles.ts                the jobs
     work.ts                 everything I have done, as one ranked list
     stack.ts                the technologies
-    demos.ts                the screen recordings and the /demos page's words
+    demos.ts                the screen recordings, and each role's demos
+                            page's words (`demoPages`)
     index.ts                the only entry point: barrel + derived indexes
   utils/
     externalLink.ts         the attributes an anchor needs to leave the site
@@ -150,7 +155,7 @@ passthrough.
 
 - **A rail lists the siblings of the page it is on**: the landing's sections,
   the areas on `/work/<area>`, the roles on `/roles/<id>`, the demos on
-  `/demos`. Never another
+  `/demos/<role>`. Never another
   page's list.
 - **The way back** comes first in the rail on a desktop. On a phone it is the
   left of the pinned bar only, as an arrow with its label as the accessible
@@ -167,7 +172,8 @@ passthrough.
   row is the one with `aria-current`.
 
 **The landing** is About, Roles, Highlights, Demos, Stack, Work, Contact, Misc.
-Demos is one linked card, the door to `/demos`.
+Demos is one linked card per role with recordings (`rolesWithDemos`), the
+door to `/demos/<role>`.
 `SECTIONS` in `page.tsx` drives both the sections and the rail.
 
 **Highlights is the first six items of `work`.** The order of `work.ts` is the
@@ -197,13 +203,21 @@ on a `surface` tile the size of the avatar, drawn in `--color-ink`.
 
 **`/roles/<id>`** is the intro, `My role at <company>`, then for a job that is
 over a section titled by `role.ending` ("Why Tagly ended"), then, where any
-demo names the role, `See <company> working` with a link to `/demos`, then
+demo names the role, `See <company> working` with a link to `/demos/<role>`, then
 `What I've done here`.
 
-**`/demos`** is the intro, then one `DemoDetail` section per entry in
-`demos.ts`: the context beside a `natural`-shaped `CustomMedia` that plays the
-recording in a dialog. Its rail lists the demos, the way the landing's rail
-lists its sections. A work item a recording proves carries the same file in
+**`/demos/<role>`** opens with the company's figure, `<company> demos` and
+the role's `links`, like its role page, then one `DemoDetail` section per
+demo of that role: the context beside a `natural`-shaped `CustomMedia` that
+plays the recording in a dialog. Its rail lists the demos, the way the
+landing's rail lists its sections. Each role with demos needs its words in
+`demoPages`; `content:check` fails one without.
+
+**`/demos`** only sends the reader on, to the first of `rolesWithDemos`. A
+static export has no server redirect and `redirect()` exports a page that
+moves only once its JavaScript runs, so it is a meta refresh with a canonical
+link and `noindex`. When a second role gets demos it becomes the page that
+chooses between them. A work item a recording proves carries the same file in
 its `media` as a `video`, with a still as `src` and an optional `#t=` fragment
 to open at the part it proves. `role.contribution` is what I did: required, and what every preview
 of the role shows. `role.about` is what the company does and `role.ending` why
@@ -600,7 +614,8 @@ it passes. If it sounds like a landing page someone requested, rewrite it plain.
   - an empty area;
   - an unclosed `**` in work copy, or `**` in a title or caption.
   - a media `src` or `video`, or a demo's poster or video, that is not in
-    `public/`.
+    `public/`;
+  - a role with demos and no entry in `demoPages`.
 
   Add new invariants there rather than trusting a convention.
 - **The stack is grouped by layer** (core, backend, services, infrastructure,

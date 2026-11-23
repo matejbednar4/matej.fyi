@@ -3,7 +3,7 @@ import { CustomSection } from "@/components/primitives/CustomSection";
 import type { Demo } from "@/content";
 
 /**
- * One demo in full, as its own section of /demos: the context on the left and
+ * One demo in full, as its own section of its role's demos page: the context on the left and
  * the recording beside it, at the phone's own proportions so the screen reads
  * as a phone. On a phone the words come first and the recording follows.
  *

@@ -77,6 +77,15 @@ try {
     }
   }
 
+  // A role with recordings gets a /demos/<role> page, and that page's opening
+  // paragraph and snippet are written, not derived. Without them the page
+  // would build to a 404 and the landing's card would have no words.
+  for (const role of c.rolesWithDemos) {
+    if (!c.demoPages[role.id]) {
+      problems.push(`role "${role.id}" has demos but no entry in demoPages`);
+    }
+  }
+
   const used = c.stack.length - c.unusedStack.length;
   console.log(`${c.work.length} work items, ${c.roles.length} roles, ${c.stack.length} stack entries`);
   console.log(`${used}/${c.stack.length} stack entries have evidence`);

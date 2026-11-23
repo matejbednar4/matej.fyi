@@ -2,8 +2,8 @@ import type { RoleId } from "./roles";
 
 /**
  * Screen recordings of the product, each with the context a reader needs to
- * follow it. They have their own page, /demos, one section per recording, in
- * this order.
+ * follow it. Each role with recordings has its own page, /demos/<role>, one
+ * section per recording, in this order. /demos itself only redirects.
  *
  * Each context stands on its own: a reader can land on any section from the
  * rail, so none points at another demo.
@@ -18,9 +18,9 @@ import type { RoleId } from "./roles";
  */
 
 export type Demo = {
-  /** The section's anchor on /demos. */
+  /** The section's anchor on its role's demos page. */
   id: string;
-  /** Whose product it is: the role's page links here when it has any. */
+  /** Whose product it is, and so which /demos/<role> page it is on. */
   role: RoleId;
   /** The section's heading. */
   title: string;
@@ -38,12 +38,20 @@ export type Demo = {
   alt: string;
 };
 
-/** The page's own words: its heading, its opening paragraph, its snippet. */
-export const demosPage = {
-  title: "Demos",
-  lede: "Screen recordings of Tagly, across the customer, business and internal admin apps. After we stopped Tagly, I had to take it down to stop paying for the infrastructure, so I recorded these demos before I did. They run on the staging apps with test accounts and Stripe in test mode, so no real money moves. There's no sound: the captions in each video say what's happening.",
-  description:
-    "Screen recordings of Tagly's customer, business and admin apps: the customer share flow, the tag check, QR sticker referrals, the full share flow, business auto suggestions, the business wallet and business onboarding.",
+/**
+ * A role's demos page in its own words: the opening paragraph and the snippet
+ * a search result, and the landing's card, show. The heading is derived from
+ * the company's name. Every role with recordings needs one; `content:check`
+ * fails a role that has demos and no words for their page.
+ */
+export type DemoPage = { lede: string; description: string };
+
+export const demoPages: Partial<Record<RoleId, DemoPage>> = {
+  tagly: {
+    lede: "Screen recordings of Tagly, across the customer, business and internal admin apps. After we stopped Tagly, I had to take it down to stop paying for the infrastructure, so I recorded these demos before I did. They run on the staging apps with test accounts and Stripe in test mode, so no real money moves. There's no sound: the captions in each video say what's happening.",
+    description:
+      "Screen recordings of Tagly's customer, business and admin apps: the customer share flow, the tag check, QR sticker referrals, the full share flow, business auto suggestions, the business wallet and business onboarding.",
+  },
 };
 
 export const demos: readonly Demo[] = [

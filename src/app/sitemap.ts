@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { AREAS, roles, site } from "@/content";
+import { AREAS, roles, rolesWithDemos, site } from "@/content";
 
 // Required under `output: "export"`: written to out/sitemap.xml at build time.
 export const dynamic = "force-static";
@@ -20,6 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/` },
     ...roles.map((role) => ({ url: `${site.url}/roles/${role.id}/` })),
     ...AREAS.map((area) => ({ url: `${site.url}/work/${area}/` })),
-    { url: `${site.url}/demos/` },
+    ...rolesWithDemos.map((role) => ({ url: `${site.url}/demos/${role.id}/` })),
   ];
 }

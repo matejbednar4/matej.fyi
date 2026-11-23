@@ -1,59 +1,36 @@
 import type { Metadata } from "next";
 
-import { Clapperboard } from "lucide-react";
-
-import { PageHeader } from "@/components/PageHeader";
-import { Sidebar } from "@/components/Sidebar";
-import { DemoDetail } from "@/components/details/DemoDetail";
-import { demos, demosPage, profile, site } from "@/content";
+import { rolesWithDemos, site } from "@/content";
 
 /**
- * The product, recorded, with the context each recording needs. One section
- * per demo, so the rail lists the demos the way the landing's rail lists its
- * sections.
+ * /demos has nothing of its own while only one role has recordings, so it
+ * sends the reader to that role's page. When a second role gets demos, this
+ * becomes the page that chooses between them.
+ *
+ * A meta refresh rather than `redirect()`: under `output: "export"` there is
+ * no server to answer with a redirect, and `redirect()` exports a page that
+ * only moves once its JavaScript runs, so a crawler or a reader without it
+ * would be left on a blank page. The refresh works in plain HTML, the
+ * canonical tells a search engine which page to keep, and the link is there
+ * for anyone the refresh does not move.
  */
-
-// Set in full rather than inherited; see the area page for why.
-const title = `${demosPage.title} | ${profile.name}`;
-const url = `${site.url}/demos/`;
+const target = rolesWithDemos[0];
+const href = `/demos/${target.id}/`;
 
 export const metadata: Metadata = {
-  title: demosPage.title,
-  description: demosPage.description,
-  alternates: { canonical: `${site.url}/demos` },
-  openGraph: {
-    type: "website",
-    siteName: profile.name,
-    locale: site.locale,
-    url,
-    title,
-    description: demosPage.description,
-  },
-  twitter: { card: "summary", title, description: demosPage.description },
+  title: `${target.company} demos`,
+  alternates: { canonical: `${site.url}${href}` },
+  robots: { index: false },
 };
 
 export default function DemosPage() {
   return (
-    <>
-      <Sidebar
-        back={{ href: "/", label: profile.name }}
-        nav={{
-          kind: "sections",
-          items: demos.map((demo) => ({ id: demo.id, label: demo.label })),
-        }}
-      />
-
-      <main>
-        <PageHeader
-          icon={Clapperboard}
-          title={demosPage.title}
-          lede={demosPage.lede}
-        />
-
-        {demos.map((demo) => (
-          <DemoDetail key={demo.id} demo={demo} />
-        ))}
-      </main>
-    </>
+    <main>
+      {/* React hoists this into <head>. */}
+      <meta httpEquiv="refresh" content={`0; url=${href}`} />
+      <p className="text-lede text-ink-muted">
+        The demos are on the <a href={href}>{target.company} demos page</a>.
+      </p>
+    </main>
   );
 }

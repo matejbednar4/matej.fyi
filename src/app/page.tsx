@@ -13,8 +13,9 @@ import { WorkHighlights } from "@/components/WorkHighlights";
 import {
   AREAS,
   STACK_GROUP_LABEL,
-  demos,
-  demosPage,
+  demoPages,
+  demosOf,
+  rolesWithDemos,
   highlights,
   profile,
   roles,
@@ -228,23 +229,26 @@ export default function Home() {
           <WorkHighlights items={highlights} />
         </CustomSection>
 
-        {/* The door to the recordings, right after the work they show: one
-            card rather than the videos themselves, because each needs the
-            context its page gives it. */}
+        {/* The doors to the recordings, right after the work they show: one
+            card per role with demos rather than the videos themselves,
+            because each needs the context its page gives it. */}
         <CustomSection
           id="demos"
           title="Demos"
           subtitle="The product, recorded"
         >
-          <CustomCard
-            icon={Clapperboard}
-            href="/demos"
-            action={`Watch all ${demos.length}`}
-            heading="Tagly, end to end"
-            headingLevel={3}
-          >
-            <p>{demosPage.description}</p>
-          </CustomCard>
+          {rolesWithDemos.map((role) => (
+            <CustomCard
+              key={role.id}
+              icon={Clapperboard}
+              href={`/demos/${role.id}`}
+              action={`Watch all ${demosOf(role.id).length}`}
+              heading={`${role.company}, end to end`}
+              headingLevel={3}
+            >
+              <p>{demoPages[role.id]?.description}</p>
+            </CustomCard>
+          ))}
         </CustomSection>
 
         {/* The one section that has to be interactive, so the grids move into a

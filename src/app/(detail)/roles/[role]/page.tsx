@@ -11,7 +11,7 @@ import { WorkItemDetail } from "@/components/details/WorkItemDetail";
 import {
   AREAS,
   AREA_META,
-  demos,
+  demosOf,
   profile,
   roles,
   site,
@@ -75,7 +75,7 @@ export default async function RolePage({
   // Kinds of work this role actually holds, in the areas' own order. An empty
   // area is dropped here rather than in the filter, so the chip row never
   // offers a count of nothing.
-  const roleDemos = demos.filter((demo) => demo.role === role.id);
+  const roleDemos = demosOf(role.id);
 
   const areasWorkedIn = AREAS.map((area) => ({
     area,
@@ -128,7 +128,7 @@ export default async function RolePage({
           <CustomSection id="demos" title={`See ${role.company} working`}>
             <div className="flex flex-wrap gap-3">
               <CustomButton
-                href="/demos"
+                href={`/demos/${role.id}`}
                 label={`Watch the ${roleDemos.length} demos`}
                 variant="secondary"
               />
