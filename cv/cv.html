@@ -10,7 +10,7 @@
 <title>Matěj Bednář</title>
 <meta name="author" content="Matěj Bednář">
 <style>
-  @page { size: A4; margin: 11mm 14mm 9mm; }
+  @page { size: A4; margin: 10mm 14mm 8mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body {
@@ -21,7 +21,7 @@
        the PDF's text layer and a parser reads "2025–2026" as "20252026". */
     font-feature-settings: "calt" 0, "case" 0, "liga" 0;
     font-size: 9.3pt;
-    line-height: 1.3;
+    line-height: 1.27;
     color: #111;
   }
   a { color: inherit; text-decoration: none; }
@@ -44,7 +44,7 @@
 
   .summary { margin-top: 6pt; }
 
-  section { margin-top: 7pt; padding-top: 6pt; border-top: 0.75pt solid #8a8a8a; }
+  section { margin-top: 6pt; padding-top: 5pt; border-top: 0.75pt solid #8a8a8a; }
   h2 { font-size: 10.2pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 5pt; }
 
   .role { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; }
@@ -56,12 +56,14 @@
   /* Why the role ended, after its bullets: the gap a heading would leave. */
   .about.ending { margin-top: 6pt; }
 
-  h4 { font-size: 9.8pt; font-weight: 600; margin-top: 5pt; margin-bottom: 1.5pt; }
+  h4 { font-size: 9.8pt; font-weight: 600; margin-top: 4pt; margin-bottom: 1.5pt; }
   ul { padding-left: 13pt; }
   li { margin-bottom: 0.5pt; }
   li::marker { font-size: 8pt; }
 
   .stack p { margin-bottom: 1pt; }
+  /* A second school under the first: the gap that tells two entries apart. */
+  .school { margin-top: 6pt; }
 </style>
 </head>
 <body>
@@ -127,6 +129,8 @@
   <h2>Education</h2>
   <p>ČVUT FIT, Computer Science, 2025–2026</p>
   <p>Left one semester in to build Tagly full-time.</p>
+  <p class="school">Gymnázium Václava Beneše Třebízského, Slaný, 2016–2024</p>
+  <p>8-year gymnázium, maturita 2024</p>
 </section>
 </body>
 </html>
