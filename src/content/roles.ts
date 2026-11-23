@@ -73,6 +73,11 @@ export const roles = [
         href: "https://www.instagram.com/tagly_cz/",
         icon: "instagram",
       },
+      {
+        label: "Tagly on GitHub",
+        href: "https://github.com/matejbednar4/tagly-public/",
+        icon: "github",
+      },
     ],
     about:
       "Tagly is a platform where local businesses pay their customers for posting about them on Instagram. Customers get rewarded based on the reach and audience fit of what they post and businesses get a new marketing channel without spending any time on it.",
