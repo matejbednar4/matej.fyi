@@ -15,6 +15,10 @@ import { profile } from "@/content";
  * out. Change one, change both.
  */
 
+// Required under `output: "export"`: written to out/opengraph-image.png at
+// build time.
+export const dynamic = "force-static";
+
 export const alt = profile.name;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
