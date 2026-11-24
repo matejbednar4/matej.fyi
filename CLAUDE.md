@@ -38,6 +38,9 @@ src/
   app/
     layout.tsx              root layout: fonts, metadata, the brand sprite
     globals.css             the token contract + base styles (only global CSS)
+    opengraph-image.tsx     the link preview, my name on the ground, rendered
+                            to a PNG at build time; its colours are written
+                            out from globals.css
     page.tsx                landing: SECTIONS, then About, Roles, Highlights,
                             Demos, Stack, Work, Contact, Misc, written out
                             inline
@@ -82,6 +85,8 @@ src/
     demos.ts                the screen recordings, and each role's demos
                             page's words (`demoPages`)
     index.ts                the only entry point: barrel + derived indexes
+  fonts/
+    playfair-display-600.woff  for opengraph-image, which cannot use next/font
   utils/
     externalLink.ts         the attributes an anchor needs to leave the site
 cv/
@@ -635,4 +640,5 @@ it passes. If it sounds like a landing page someone requested, rewrite it plain.
   `*.pdf` is gitignored with one exception for `public/cv.pdf`, and
   `content:check` fails on a link to a file that is not in `public/`.
 - **Open:** the sub-pages set `title`, `description` and `canonical` but not
-  `openGraph`, so a shared `/work/<area>` link previews with the landing's text.
+  `openGraph`, so a shared `/work/<area>` link previews with the landing's text
+  (and the landing's image, which is only my name, so that part holds).

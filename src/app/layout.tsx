@@ -37,9 +37,13 @@ export const metadata: Metadata = {
     title,
     description: site.description,
   },
-  // `summary`, not `summary_large_image`: there is no OG image yet, and claiming
-  // one that does not exist gets the card downgraded anyway.
-  twitter: { card: "summary", title, description: site.description },
+  // The image is `app/opengraph-image.tsx`, which Next resolves by file
+  // convention. X reads it as og:image when there is no twitter:image.
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: site.description,
+  },
   alternates: { canonical: site.url },
   robots: { index: true, follow: true },
 };
