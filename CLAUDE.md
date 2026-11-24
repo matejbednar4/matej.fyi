@@ -40,7 +40,8 @@ src/
     globals.css             the token contract + base styles (only global CSS)
     opengraph-image.tsx     the link preview, my name on the ground, rendered
                             to a PNG at build time; its colours are written
-                            out from globals.css
+                            out from globals.css, its size and alt live in
+                            site.ogImage
     page.tsx                landing: SECTIONS, then About, Roles, Highlights,
                             Demos, Stack, Work, Contact, Misc, written out
                             inline
@@ -76,7 +77,8 @@ src/
   content/
     profile.ts              name, role, bio, location, photos, languages,
                             education, contact links
-    site.ts                 canonical url and the search snippet
+    site.ts                 canonical url, the search snippet and the link
+                            preview image
     areas.ts                the kinds of work, which are also the routes:
                             label, Lucide mark, tagline, meta-only blurb
     roles.ts                the jobs
@@ -95,6 +97,7 @@ cv/
   print.swift               HTML to A4 PDF through WebKit (macOS)
   check.mjs                 fails unless the PDF's text matches cv.html
 tagly-build-record/         PRIVATE, gitignored, never committed
+vercel.json                 serves /opengraph-image/ as image/png
 ```
 
 ---
@@ -639,6 +642,9 @@ it passes. If it sounds like a landing page someone requested, rewrite it plain.
   and `case` stay off in it, or brackets and dashes vanish from that text.
   `*.pdf` is gitignored with one exception for `public/cv.pdf`, and
   `content:check` fails on a link to a file that is not in `public/`.
-- **Open:** the sub-pages set `title`, `description` and `canonical` but not
-  `openGraph`, so a shared `/work/<area>` link previews with the landing's text
-  (and the landing's image, which is only my name, so that part holds).
+- **Link previews.** Each sub-page sets its own `openGraph` and `twitter`,
+  because a page's `openGraph` replaces the layout's whole object. That also
+  drops the image `opengraph-image.tsx` gives the landing, so every sub-page
+  names it again through `site.ogImage`. The static export writes the image
+  with no extension, so `vercel.json` serves `/opengraph-image/` as
+  `image/png`; keep the two together.

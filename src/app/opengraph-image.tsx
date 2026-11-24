@@ -2,12 +2,13 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-import { profile } from "@/content";
+import { profile, site } from "@/content";
 
 /**
  * The link preview: the site's ground and my name, nothing else. Rendered to a
- * PNG at build time, and Next writes the og:image and twitter:image tags for
- * every page from it.
+ * PNG at build time. Next writes the landing's og:image and twitter:image tags
+ * from this file; the sub-pages name it through `site.ogImage`, which also
+ * holds its size and alt text.
  *
  * The image renderer cannot read `globals.css`, so the ground is redrawn here
  * as SVG from the same recipe as `body::before`: `--color-background`, the two
@@ -19,9 +20,9 @@ import { profile } from "@/content";
 // build time.
 export const dynamic = "force-static";
 
-export const alt = profile.name;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const alt = site.ogImage.alt;
+export const size = { width: site.ogImage.width, height: site.ogImage.height };
+export const contentType = site.ogImage.type;
 
 const { width, height } = size;
 
